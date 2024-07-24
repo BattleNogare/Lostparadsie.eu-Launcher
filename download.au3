@@ -16,7 +16,7 @@ Local $sLogFilePath = @WorkingDir & "\LP-Data\Launcher-Log.txt"
 Func WriteLog($sMessage)
     Local $hFile = FileOpen($sLogFilePath, $FO_APPEND)
     If $hFile = -1 Then
-        ConsoleWrite("Fehler: Kann die Log-Datei nicht öffnen. " & @error & @CRLF)
+        ConsoleWrite("Fehler: Kann die Log-Datei nicht Ã¶ffnen. " & @error & @CRLF)
         Return
     EndIf
     FileWriteLine($hFile, @YEAR & "-" & @MON & "-" & @MDAY & " " & @HOUR & ":" & @MIN & ":" & @SEC & ":" & @MSEC & " - " & $sMessage)
@@ -30,23 +30,23 @@ Local $sDestPath = IniRead($sTempIni, "Downloads", $sDestKey, "")
 WriteLog("Starte Download: " & $sFileName & " von " & $sUrl & " nach @WorkingDir" & $sDestPath)
 
 If $sUrl = "" Or $sDestPath = "" Then
-    WriteLog("Fehler: Ungültige URL oder Zielpfad für " & $sFileName)
+    WriteLog("Fehler: UngÃ¼ltige URL oder Zielpfad fÃ¼r " & $sFileName)
     Exit
 EndIf
 
 ; Download starten
 Local $qDownload = InetGet($sUrl, @WorkingDir & $sDestPath, 1, 1)
 If @error Then
-    WriteLog("Fehler: Download konnte nicht gestartet werden für " & $sFileName & ". Fehlercode: " & @error)
+    WriteLog("Fehler: Download konnte nicht gestartet werden fÃ¼r " & $sFileName & ". Fehlercode: " & @error)
     Exit
 EndIf
 
-; Download-Fortschritt überwachen
+; Download-Fortschritt Ã¼berwachen
 Do
     Sleep(100)
 Until InetGetInfo($qDownload, $INET_DOWNLOADCOMPLETE) = 1
 
-; Fehlerprüfung nach Download-Abschluss
+; FehlerprÃ¼fung nach Download-Abschluss
 If InetGetInfo($qDownload, $INET_DOWNLOADSUCCESS) Then
     WriteLog("Download abgeschlossen: " & $sFileName)
 Else
@@ -56,7 +56,7 @@ Else
 
     Switch $iError
         Case 1
-            $sErrorMessage = "Host konnte nicht aufgelöst werden"
+            $sErrorMessage = "Host konnte nicht aufgelÃ¶st werden"
         Case 2
             $sErrorMessage = "Verbindung konnte nicht hergestellt werden"
         Case 3
@@ -69,7 +69,7 @@ Else
             $sErrorMessage = "Fehlercode: " & $iError
     EndSwitch
 
-    WriteLog("Fehler: Download fehlgeschlagen für " & $sFileName & ". Grund: " & $sErrorMessage)
+    WriteLog("Fehler: Download fehlgeschlagen fÃ¼r " & $sFileName & ". Grund: " & $sErrorMessage)
 EndIf
 
 InetClose($qDownload)
