@@ -51,7 +51,7 @@ $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYE
 GUICtrlSetDefColor(0xcdd8e0)
 GUICtrlSetDefBkColor(0x252729)
 
-GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico)
+GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico")
 
 ; Background Pic
 $background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
