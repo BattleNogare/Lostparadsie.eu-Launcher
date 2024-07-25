@@ -105,7 +105,7 @@ While 1
 			If @error Then
 				GUICtrlSetData($SpeicherInput, "")
 			Else
-				Local $LPOrdnerName = "Lostparadise-Laucher"
+				Local $LPOrdnerName = "Lostparadise-Launcher"
 				$NewFolderPathInstall = $sFolderPathInstall & "\" & $LPOrdnerName
 				GUICtrlSetData($SpeicherInput, $NewFolderPathInstall & "\")
 			EndIf
