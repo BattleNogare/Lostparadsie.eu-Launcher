@@ -343,8 +343,8 @@ While 1
 			Local $End = MsgBox(4, "[Lostparadise.eu]", "Installation abgeschlossen" & @CRLF & "Soll die Anwendung nun gestartet werden?")
 
 			If $End = 6 Then
-				;Run(@DesktopDir & "\Lostparadise.lnk")
-				MsgBox(0, "End", @DesktopDir & "\Lostparadise.lnk" & " wird gestartet!")
+				Run(@DesktopDir & "\Lostparadise.lnk")
+				;MsgBox(0, "End", @DesktopDir & "\Lostparadise.lnk" & " wird gestartet!")
 			EndIf
 
 			ExitLoop
