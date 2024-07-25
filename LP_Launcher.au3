@@ -49,6 +49,7 @@ Global $sOutput = ""
 $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
 ;GUIRegisterMsg($WM_LBUTTONDOWN, "WM_LBUTTONDOWN")
 GUICtrlSetDefColor(0xcdd8e0)
+GUICtrlSetDefBkColor(0x252729)
 
 ; Background Pic
 $background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
