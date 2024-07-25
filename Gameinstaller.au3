@@ -3,7 +3,7 @@
  Author: BattleNogare
 
  Script Function:
-    Installer und Gui für Lostparadise.eu Arma3Sync-Laucher
+    Installer Lostparadise.eu Arma3Sync-Laucher
 
 #ce ----------------------------------------------------------------------------
 
@@ -291,33 +291,33 @@ While 1
 				Sleep(1000)
 			EndIf
 
-			WriteLog("Starte Download-Downloader" & @CRLF)
 
+			; Download Downloader
+			WriteLog("Starte Download-Downloader" & @CRLF)
 			$downDownloaderURL = IniRead($sTempIni, "Downloads", "downDownloader", $IniDefaultwert)
 			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\download.exe"
-
 			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
 			InetClose($downDownload)
-
 			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
 
+			; Download LauncherUpdate
+			WriteLog("Starte Download LauncherUpdate" & @CRLF)
+			$downDownloaderURL = IniRead($sTempIni, "Downloads", "LauncherUpdate", $IniDefaultwert)
+			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\LauncherUpdate.exe"
+			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
+			InetClose($downDownload)
+			WriteLog("Download LauncherUpdate abgeschlossen" & @CRLF)
+
+			; Download .ico
 			;MsgBox(0,"test", $downDownloaderURL & " - " & $downDownloaderpath)
 			$LPicoURL = IniRead($sTempIni, "Downloads", "LPicon.ico", $IniDefaultwert)
 			$LPicopath = IniRead($sTempIni, "Downloads", "LPicon_dest", $IniDefaultwert)
-
 			$LPDatapath = GUICtrlRead($SpeicherInput) & "Arma3Sync\LP-Data"
 			DirCreate($LPDatapath)
-
-			;MsgBox(0,"test", $LPicoURL &" - "& $sDirectory & $LPicopath)
-
-
-
 			WriteLog("Starte .ico Download" & @CRLF)
 			Local $icoDownload = InetGet($LPicoURL, $sDirectory & $LPicopath, 1, $INET_DOWNLOADWAIT)
 			InetClose($icoDownload)
-
 			WriteLog("Download .ico abgeschlossen" & @CRLF)
-
 
 			; Erstelle Desktop-Verknüpfung
 			GUICtrlSetData($progresstext, "Erstelle Desktop-Lostparadise-Verknüpfung")
@@ -326,8 +326,6 @@ While 1
 			Local $LostparadiseexePath = $sDirectory & "\LauncherUpdate.exe"
 			FileCreateShortcut($LostparadiseexePath, @DesktopDir & "\Lostparadise.lnk", $sDirectory, "", "Lostparadise Launcher", $iconPath)
 			WriteLog("Desktopverknüpfung erstellt" & @CRLF)
-
-
 
 
 			;#########################################################################################
