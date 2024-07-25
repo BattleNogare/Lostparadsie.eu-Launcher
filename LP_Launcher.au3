@@ -36,6 +36,8 @@
 #include <Inet.au3>
 #include <GuiConstants.au3>
 
+#AutoIt3Wrapper_icon=LPicon.ico
+
 ;#RequireAdmin
 DllCall("uxtheme.dll", "none", "SetThemeAppProperties", "int", 0)
 
