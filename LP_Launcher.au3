@@ -62,8 +62,8 @@ GUICtrlSetDefBkColor($BKColor)
 GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico")
 
 ; Background Pic
-;$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
-;GUICtrlSetState(-1, $GUI_DISABLE)
+$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
+GUICtrlSetState(-1, $GUI_DISABLE)
 
 $LauncherTab = GUICtrlCreateButton("Launcher", 2, 2, 60, 18)
 $OptionenTab = GUICtrlCreateButton("Optionen", 62, 2, 60, 18)
