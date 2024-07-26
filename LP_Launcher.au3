@@ -41,11 +41,11 @@
 ;#RequireAdmin
 DllCall("uxtheme.dll", "none", "SetThemeAppProperties", "int", 0)
 
-$ParainiFile = @WorkingDir & "\LP-Data\Launcherconfig.ini"
+$ParaIniFile = @WorkingDir & "\LP-Data\Launcherconfig.ini"
 Global $sParameters = ""
 Global $iPID = 0
 Global $sOutput = ""
-;Global $WM_LBUTTONDOWN = 0x0201
+Local $sTempIni = @WorkingDir & "\LP-Data\temp_config.ini"
 
 ; GUI erstellen
 $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
@@ -144,16 +144,6 @@ GUICtrlSetBkColor(-1, 0x252729)
 GUICtrlSetColor(-1, 0xcdd8e0)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-; Gruppe Zusätzliche Parameter
-GUICtrlCreateGroup(" zus Paramenter", 258, 253, 264, 222)
-GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-$AdditionalParameters = GUICtrlCreateEdit("", 268, 273, 244, 192)
-GUICtrlSetData(-1, "")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
-GUICtrlSetState(-1, $GUI_DISABLE)
-GUICtrlCreateGroup("", -99, -99, 1, 1)
-
 ;Gruppe Laucher
 $LauncherOptions = GUICtrlCreateGroup("Launcher Einstellungen", 6, 31, 250, 212)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
@@ -161,6 +151,7 @@ $ShowScriptErrors = GUICtrlCreateCheckbox("Zeige Script Fehler", 16, 52, 200, 20
 GUICtrlSetTip(-1, "Zeige Ingame Script Errors")
 GUICtrlSetColor(-1, 0xcdd8e0)
 $NoPause = GUICtrlCreateCheckbox("Keine Pause", 16, 75, 200, 20)
+GUICtrlSetState(-1, $GUI_CHECKED)
 GUICtrlSetTip(-1, "Pausiert nicht das Game wenn im Hintergrund")
 $NoPauseAudio = GUICtrlCreateCheckbox("Keine Pause des Sounds", 16, 98, 200, 20)
 GUICtrlSetTip(-1, "Pausiert nicht das Game-Audio wenn im Hintergrund")
@@ -173,9 +164,9 @@ GUICtrlSetTip(-1, "Überprüfe Signaturen von PBO Files")
 $EnableBattlEye = GUICtrlCreateCheckbox("Aktiviere BattlEye", 16, 190, 200, 20) ; Disabled da immer nötig
 GUICtrlSetTip(-1, "Unter Lostparadise.eu immer nötig")
 GUICtrlSetState(-1, $GUI_CHECKED)
+GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlSetBkColor(-1, 0x252729)
 GUICtrlSetColor(-1, 0xcdd8e0)
-GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ;Gruppe Performance
 GUICtrlCreateGroup("Leistung", 6, 253, 250, 222)
@@ -213,25 +204,64 @@ GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlCreateGroup("Debug", 524, 103, 172, 65)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 $Arma3SyncDebug = GUICtrlCreateCheckbox("Debug", 533, 128, 60, 25)
-GUICtrlSetTip(-1, "Zeigt alles im Output an")
+GUICtrlSetTip(-1, "Zeigt alles im Ausgabefeld an")
 GUICtrlSetBkColor(-1, 0x252729)
 GUICtrlSetColor(-1, 0xcdd8e0)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-; Gruppe Mods
-GUICtrlCreateGroup("Auswahl Mods", 524, 172, 172, 65)
+; Gruppe Mod-Auswahl
+Local $sMods = IniRead($sTempIni, "Serverdata", "mod", "")
+Local $aMods = StringSplit($sMods, ";")
+
+
+GUICtrlCreateGroup("Mod-Auswahl", 258, 253, 264, 105)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-$Arma3SyncDebug = GUICtrlCreateCheckbox("Mod1", 533, 128, 60, 25)
-GUICtrlSetTip(-1, "Zeigt alles im Output an")
+GUICtrlSetColor(-1, 0xCDD8E0)
+$ModPack1 = GUICtrlCreateCheckbox($aMods[1], 265, 277, 180, 25)
 GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetState(-1, $GUI_CHECKED)
+$ModPackOptional = GUICtrlCreateCheckbox($aMods[2], 265, 309, 180, 25)
+GUICtrlSetBkColor(-1, 0x252729)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+#cs
+; Gruppe Repository
+$RepoGroup = GUICtrlCreateGroup("Repository-Auswahl", 258, 370, 264, 105)
+GUICtrlSetFont(-1, 12, 400, 0, "Arial")
+GUICtrlSetColor(-1, 0xCDD8E0)
+$RepoLife = GUICtrlCreateCheckbox("Hohenstein-Life", 265, 389, 180, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+$RepoDev = GUICtrlCreateCheckbox("Hohenstein-Life Dev", 265, 421, 180, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlCreateGroup("", -99, -99, 1, 1)
+GUICtrlSetState(-1, @SW_HIDE)
+
+; Gruppe Dev
+$DevGroup = GUICtrlCreateGroup("Dev", 524, 253, 172, 222)
+GUICtrlSetFont(-1, 12, 400, 0, "Arial")
+GUICtrlSetColor(-1, 0xCDD8E0)
+$ListRepos = GUICtrlCreateButton("ListRepos", 538, 277, 143, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetTip(-1, "List Repos")
+$ListRepos = GUICtrlCreateButton("EditRepos", 538, 309, 143, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetTip(-1, "Edit Repos")
+$SyncDev = GUICtrlCreateButton("SyncDev", 538, 389, 143, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetTip(-1, "Sync Dev Repo")
+$SyncDev = GUICtrlCreateButton("Start Arma mit Dev", 538, 421, 143, 25)
+GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetTip(-1, "Starte Arma mit Dev Repo")
+GUICtrlCreateGroup("", -99, -99, 1, 1)
+GUICtrlSetState(-1, @SW_HIDE)
+#ce
+
 
 GUICtrlCreateTabItem("")
 
 LoadSettings()
 _UpdateParameters()
-_SyncInfos()
+
 
 GUISetState(@SW_SHOW)
 
@@ -249,14 +279,17 @@ While 1
 				Case 0 ; Tab 1 ausgewählt
 					;GUICtrlSetState($Logo, $GUI_SHOW)
 					GUICtrlSetState($LauncherOptions, $GUI_HIDE)
+
 				Case 1 ; Tab 2 ausgewählt
 					;GUICtrlSetState($Logo, $GUI_HIDE)
 					;GUICtrlSetState($Logo, $GUI_HIDE)
 					GUICtrlSetState($LauncherOptions, $GUI_SHOW)
+
 			EndSwitch
 		Case $SyncButton
 			_SyncButtonClick()
 		Case $LPLaunchButton
+			FileDelete($sTempIni)
 
 		Case $ShowScriptErrors
 			_UpdateParameters()
@@ -300,6 +333,7 @@ While 1
 WEnd
 
 Func _Exit()
+	FileDelete($sTempIni)
 	Exit
 EndFunc   ;==>_Exit
 
@@ -315,7 +349,6 @@ Func _SyncButtonClick()
 	GUICtrlSetState($SyncButtonCancel, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_DISABLE)
 	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
-	_SyncInfos()
 
 	Local $sCommand = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -SYNC "[GER] LostParadise - HohensteinLife - DEVELOPMENT" "C:\Program Files (x86)\Steam\steamapps\common\Arma 3" False'
 	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
@@ -386,9 +419,6 @@ Func _SyncButtonClick()
 		Sleep(200) ; CPU entlasten
 	WEnd
 
-	; Zeige eine abschließende Nachricht an
-	; MsgBox(64, "Sync Status", $sExitMessage)
-	; Setze die Steuerelemente zurück
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
 	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
@@ -404,18 +434,6 @@ Func _SyncButtonCancelClick()
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
 	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
 EndFunc   ;==>_SyncButtonCancelClick
-
-Func _SyncInfos()
-	Local $sInfoUrl = "https://cloud.sbe.de/s/9AxjmkDGRq4SyR4/download/LP-Launcher-Infos.txt"
-	Local $sInfoFilePath = @WorkingDir & "\LP-Data\LPInfos.txt"
-	Local $kDownload = InetGet($sInfoUrl, $sInfoFilePath, 1, 1)
-	Do
-		Sleep(100)
-	Until InetGetInfo($kDownload, $INET_DOWNLOADCOMPLETE) = 1
-	InetClose($kDownload)
-	Local $sInfoFileContent = FileRead($sInfoFilePath)
-	GUICtrlSetData($hInfoLabel, $sInfoFileContent)
-EndFunc   ;==>_SyncInfos
 
 Func _UpdateParameters()
 	GUICtrlSetState($EnableBattlEye, $GUI_CHECKED)
@@ -440,39 +458,35 @@ EndFunc   ;==>_UpdateParameters
 
 
 Func SaveSettings()
-	IniWrite($ParainiFile, "Options", "ShowScriptErrors", GUICtrlRead($ShowScriptErrors))
-	IniWrite($ParainiFile, "Options", "NoPause", GUICtrlRead($NoPause))
-	IniWrite($ParainiFile, "Options", "WindowMode", GUICtrlRead($WindowMode))
-	IniWrite($ParainiFile, "Options", "FilePatching", GUICtrlRead($FilePatching))
-	IniWrite($ParainiFile, "Options", "CheckSignatures", GUICtrlRead($CheckSignatures))
-	IniWrite($ParainiFile, "Options", "EnableBattlEye", GUICtrlRead($EnableBattlEye))
+	IniWrite($ParaIniFile, "Options", "ShowScriptErrors", GUICtrlRead($ShowScriptErrors))
+	IniWrite($ParaIniFile, "Options", "NoPause", GUICtrlRead($NoPause))
+	IniWrite($ParaIniFile, "Options", "WindowMode", GUICtrlRead($WindowMode))
+	IniWrite($ParaIniFile, "Options", "FilePatching", GUICtrlRead($FilePatching))
+	IniWrite($ParaIniFile, "Options", "CheckSignatures", GUICtrlRead($CheckSignatures))
+	IniWrite($ParaIniFile, "Options", "EnableBattlEye", GUICtrlRead($EnableBattlEye))
 
-	IniWrite($ParainiFile, "Performance", "EnableHT", GUICtrlRead($EnableHT))
-	IniWrite($ParainiFile, "Performance", "HugePages", GUICtrlRead($HugePages))
-	IniWrite($ParainiFile, "Performance", "NoSplash", GUICtrlRead($NoSplash))
-	IniWrite($ParainiFile, "Performance", "NoLogs", GUICtrlRead($NoLogs))
+	IniWrite($ParaIniFile, "Performance", "EnableHT", GUICtrlRead($EnableHT))
+	IniWrite($ParaIniFile, "Performance", "HugePages", GUICtrlRead($HugePages))
+	IniWrite($ParaIniFile, "Performance", "NoSplash", GUICtrlRead($NoSplash))
+	IniWrite($ParaIniFile, "Performance", "NoLogs", GUICtrlRead($NoLogs))
 
-	IniWrite($ParainiFile, "AddParamters", "AddPara", GUICtrlRead($AdditionalParameters))
-
-	IniWrite($ParainiFile, "Arma3exe", "ExePath", GUICtrlRead($ExecutablePath))
+	IniWrite($ParaIniFile, "Arma3exe", "ExePath", GUICtrlRead($ExecutablePath))
 EndFunc   ;==>SaveSettings
 
 Func LoadSettings()
-	GUICtrlSetState($ShowScriptErrors, IniRead($ParainiFile, "Options", "ShowScriptErrors", $GUI_UNCHECKED))
-	GUICtrlSetState($NoPause, IniRead($ParainiFile, "Options", "NoPause", $GUI_UNCHECKED))
-	GUICtrlSetState($WindowMode, IniRead($ParainiFile, "Options", "WindowMode", $GUI_UNCHECKED))
-	GUICtrlSetState($FilePatching, IniRead($ParainiFile, "Options", "FilePatching", $GUI_UNCHECKED))
-	GUICtrlSetState($CheckSignatures, IniRead($ParainiFile, "Options", "CheckSignatures", $GUI_UNCHECKED))
-	GUICtrlSetState($EnableBattlEye, IniRead($ParainiFile, "Options", "EnableBattlEye", $GUI_UNCHECKED))
+	GUICtrlSetState($ShowScriptErrors, IniRead($ParaIniFile, "Options", "ShowScriptErrors", $GUI_UNCHECKED))
+	GUICtrlSetState($NoPause, IniRead($ParaIniFile, "Options", "NoPause", $GUI_UNCHECKED))
+	GUICtrlSetState($WindowMode, IniRead($ParaIniFile, "Options", "WindowMode", $GUI_UNCHECKED))
+	GUICtrlSetState($FilePatching, IniRead($ParaIniFile, "Options", "FilePatching", $GUI_UNCHECKED))
+	GUICtrlSetState($CheckSignatures, IniRead($ParaIniFile, "Options", "CheckSignatures", $GUI_UNCHECKED))
+	GUICtrlSetState($EnableBattlEye, IniRead($ParaIniFile, "Options", "EnableBattlEye", $GUI_UNCHECKED))
 
-	GUICtrlSetState($EnableHT, IniRead($ParainiFile, "Performance", "EnableHT", $GUI_UNCHECKED))
-	GUICtrlSetState($HugePages, IniRead($ParainiFile, "Performance", "HugePages", $GUI_UNCHECKED))
-	GUICtrlSetState($NoSplash, IniRead($ParainiFile, "Performance", "NoSplash", $GUI_UNCHECKED))
-	GUICtrlSetState($NoLogs, IniRead($ParainiFile, "Performance", "NoLogs", $GUI_UNCHECKED))
+	GUICtrlSetState($EnableHT, IniRead($ParaIniFile, "Performance", "EnableHT", $GUI_UNCHECKED))
+	GUICtrlSetState($HugePages, IniRead($ParaIniFile, "Performance", "HugePages", $GUI_UNCHECKED))
+	GUICtrlSetState($NoSplash, IniRead($ParaIniFile, "Performance", "NoSplash", $GUI_UNCHECKED))
+	GUICtrlSetState($NoLogs, IniRead($ParaIniFile, "Performance", "NoLogs", $GUI_UNCHECKED))
 
-	GUICtrlSetData($AdditionalParameters, IniRead($ParainiFile, "AddParamters", "AddPara", ""))
-
-	GUICtrlSetData($ExecutablePath, IniRead($ParainiFile, "Arma3exe", "ExePath", ""))
+	GUICtrlSetData($ExecutablePath, IniRead($ParaIniFile, "Arma3exe", "ExePath", ""))
 EndFunc   ;==>LoadSettings
 
 Func _UpdateArma3SyncButtonClick()
@@ -529,17 +543,6 @@ Func _GUICtrlPic_Create($sFilename, $iLeft, $iTop, $iWidth = -1, $iHeight = -1, 
 
 	Return $idPic
 EndFunc   ;==>_GUICtrlPic_Create
-
-Func UpdateGUI()
-	Sleep(50)
-EndFunc   ;==>UpdateGUI
-
-#cs
-Func WM_LBUTTONDOWN($hWnd, $iMsg, $wParam, $lParam)
-    If BitAND(WinGetState($hWnd), 32) Then Return $GUI_RUNDEFMSG
-    DllCall("user32.dll", "long", "SendMessage", "hwnd", $hWnd, "int", $WM_SYSCOMMAND, "int", 0xF009, "int", 0)
-EndFunc
-#ce
 
 ;FileDelete($sTempIni)
 

@@ -74,6 +74,9 @@ If $OnlineVersion <> $ClientVersion Then
 	Sleep(100)
 	Run('"' & $sDownloadExe & '" "LPicon.ico" "LPicon_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
+	Run('"' & $sDownloadExe & '" "LauncherText" "LauncherText_dest" "' & $sTempIni & '"', @ScriptDir)
+	Sleep(100)
+
 
 	For $i = 0 To UBound($aPID) - 1
 		If $aPID[$i] Then
@@ -84,11 +87,11 @@ If $OnlineVersion <> $ClientVersion Then
 	FileClose($ClientVersionFile)
 	GUISetState(@SW_HIDE, $updatefenster)
 	Run(@WorkingDir & "\LP_Launcher.exe")
-	FileDelete($sTempIni)
+	;FileDelete($sTempIni)
 Else
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Lostparadise Launcher" & @CRLF)
 	Run(@WorkingDir & "\LP_Launcher.exe")
-	FileDelete($sTempIni)
+	;FileDelete($sTempIni)
 EndIf
 
 #cs
