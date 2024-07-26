@@ -29,6 +29,11 @@ Local $sData = _INetGetSource($sUrl)
 
 ; INI-Daten in eine virtuelle INI-File schreiben
 Local $sTempIni = @WorkingDir & "\LP-Data\temp_config.ini"
+
+If FileExists($sTempIni) Then
+	FileDelete($sTempIni)
+EndIf
+
 FileWrite($sTempIni, $sData)
 
 $IniDefaultwert = "Wert nicht gefunden"
