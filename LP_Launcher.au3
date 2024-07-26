@@ -291,7 +291,7 @@ While 1
 		Case $SyncButton
 			_SyncButtonClick()
 		Case $LPLaunchButton
-			FileDelete($sTempIni)
+			;FileDelete($sTempIni)
 		Case $LauncherTab
 			GUICtrlSetState($hTab1, $GUI_SHOW)
 			GUICtrlSetState($hTab2, $GUI_HIDE)
@@ -341,7 +341,7 @@ While 1
 WEnd
 
 Func _Exit()
-	FileDelete($sTempIni)
+	;FileDelete($sTempIni)
 	Exit
 EndFunc   ;==>_Exit
 
@@ -552,6 +552,6 @@ Func _GUICtrlPic_Create($sFilename, $iLeft, $iTop, $iWidth = -1, $iHeight = -1, 
 	Return $idPic
 EndFunc   ;==>_GUICtrlPic_Create
 
-FileDelete($sTempIni)
+;FileDelete($sTempIni)
 
 
