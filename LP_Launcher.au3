@@ -56,7 +56,7 @@ GUICtrlSetDefBkColor(0x252729)
 GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico")
 
 ; Background Pic
-$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
+$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 15, 800, 570)
 GUICtrlSetState(-1, $GUI_DISABLE)
 
 ; Exit Button
