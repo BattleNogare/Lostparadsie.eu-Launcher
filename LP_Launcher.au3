@@ -46,25 +46,32 @@ Global $sParameters = ""
 Global $iPID = 0
 Global $sOutput = ""
 Local $sTempIni = @WorkingDir & "\LP-Data\temp_config.ini"
+$IniDefaultwert = "Wert nicht gefunden"
+
+Local $BKColor = IniRead($sTempIni, "Launcher", "BKColor", $IniDefaultwert)
+Local $TextColor = IniRead($sTempIni, "Launcher", "TextColor", $IniDefaultwert)
 
 ; GUI erstellen
 $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
 ;GUIRegisterMsg($WM_LBUTTONDOWN, "WM_LBUTTONDOWN")
-GUICtrlSetDefColor(0xcdd8e0)
-GUICtrlSetDefBkColor(0x252729)
+GUICtrlSetDefColor($TextColor)
+GUICtrlSetDefBkColor($BKColor)
 
 GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico")
 
 ; Background Pic
-$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 15, 800, 570)
-GUICtrlSetState(-1, $GUI_DISABLE)
+;$background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
+;GUICtrlSetState(-1, $GUI_DISABLE)
+
+$LauncherTab = GUICtrlCreateButton("Launcher", 2, 2, 60, 18)
+$OptionenTab = GUICtrlCreateButton("Optionen", 62, 2, 60, 18)
 
 ; Exit Button
 $ButtonExit = GUICtrlCreateLabel("X", 780, 2, 18, 18, $SS_CENTER + $SS_CENTERIMAGE)
 GUICtrlSetOnEvent($ButtonExit, "_Exit")
 GUICtrlSetFont(-1, 12, 900, 0, "")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 
 ; Erstelle Reiter
 $hTab = GUICtrlCreateTab(0, 0, 800, 570)
@@ -86,9 +93,6 @@ GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
 $LPLaunchButton = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\lostparadisestart.png", 642, 505, 144, 54)
 GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
 
-;$LPLauchButtondisabled = GUICtrlCreateLabel("", 642, 505, 144, 54)
-;GUICtrlSetBkColor (-1, 0xFF0000)
-
 
 
 ;CMD-Ausgabe
@@ -102,21 +106,21 @@ Local $sBanner = "     __                 __   ____                           __
 
 GUICtrlSetFont($Output, 5, 5000, 0, "Courier New") ;
 GUICtrlSetData($Output, $sBanner)
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 
 ;Informationen
 Local $hInfoLabel = GUICtrlCreateLabel("", 310, 35, 475, 205)
 GUICtrlSetBkColor(-1, $GUI_BKCOLOR_TRANSPARENT) ;$GUI_BKCOLOR_TRANSPARENT; $COLOR_RED
 GUICtrlSetFont(-1, 12, 400, 0, "")
-;GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+;GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 
 Local $sInfoFilePath = @WorkingDir & "\LP-Data\LPInfos.txt"
 Local $sInfoFileContent = FileRead($sInfoFilePath)
 GUICtrlSetData($hInfoLabel, $sInfoFileContent)
-;GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+;GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 
 
 ; Dashboard
@@ -132,16 +136,16 @@ $oDoc.parentWindow.execScript("document.body.innerHTML = document.getElementById
 
 ;Erstellung 2 Reiter
 $hTab2 = GUICtrlCreateTabItem("Optionen")
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetColor(-1, $TextColor)
 
 ;Gruppe Parameter
 GUICtrlCreateGroup("Startparameter", 258, 31, 264, 212)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetColor(-1, $TextColor)
 $RunParameters = GUICtrlCreateEdit("", 268, 51, 244, 180, $ES_READONLY)
 GUICtrlSetData(-1, "")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ;Gruppe Laucher
@@ -149,7 +153,7 @@ $LauncherOptions = GUICtrlCreateGroup("Launcher Einstellungen", 6, 31, 250, 212)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 $ShowScriptErrors = GUICtrlCreateCheckbox("Zeige Script Fehler", 16, 52, 200, 20)
 GUICtrlSetTip(-1, "Zeige Ingame Script Errors")
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetColor(-1, $TextColor)
 $NoPause = GUICtrlCreateCheckbox("Keine Pause", 16, 75, 200, 20)
 GUICtrlSetState(-1, $GUI_CHECKED)
 GUICtrlSetTip(-1, "Pausiert nicht das Game wenn im Hintergrund")
@@ -165,8 +169,8 @@ $EnableBattlEye = GUICtrlCreateCheckbox("Aktiviere BattlEye", 16, 190, 200, 20) 
 GUICtrlSetTip(-1, "Unter Lostparadise.eu immer nötig")
 GUICtrlSetState(-1, $GUI_CHECKED)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 
 ;Gruppe Performance
 GUICtrlCreateGroup("Leistung", 6, 253, 250, 222)
@@ -178,8 +182,8 @@ $NoSplash = GUICtrlCreateCheckbox("Keine Default-Arma3 Splash Screens", 16, 325,
 GUICtrlSetTip(-1, "Deaktiviert Default-Arma3 Splash Screens")
 $NoLogs = GUICtrlCreateCheckbox("Deaktiviert RPT-Logging", 16, 350, 200, 20)
 GUICtrlSetTip(-1, "Deaktiviert RPT-Logging")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ;Gruppe Arma3 Exe
@@ -187,8 +191,8 @@ GUICtrlCreateGroup("Arma III Executable mit BattlEye", 6, 485, 516, 52)
 GUICtrlSetFont(-1, 8, 400, 0, "Arial")
 $ExecutablePath = GUICtrlCreateInput("", 16, 505, 420, 22)
 $ExecutablePathSelect = GUICtrlCreateButton("Durchsuchen", 446, 505, 70, 20)
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ; Gruppe Update
@@ -196,8 +200,8 @@ GUICtrlCreateGroup("Update", 524, 31, 172, 65)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 $Arma3SyncUpdate = GUICtrlCreateButton("Nach Updates suchen", 538, 56, 143, 25)
 GUICtrlSetTip(-1, "Update Arma3Sync")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ; Gruppe Debug
@@ -205,48 +209,52 @@ GUICtrlCreateGroup("Debug", 524, 103, 172, 65)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 $Arma3SyncDebug = GUICtrlCreateCheckbox("Debug", 533, 128, 60, 25)
 GUICtrlSetTip(-1, "Zeigt alles im Ausgabefeld an")
-GUICtrlSetBkColor(-1, 0x252729)
-GUICtrlSetColor(-1, 0xcdd8e0)
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ; Gruppe Mod-Auswahl
+Local $sMods = IniRead($sTempIni, "Serverdata", "mod", "")
+Local $aMods = StringSplit($sMods, ";")
+
+
 GUICtrlCreateGroup("Mod-Auswahl", 258, 253, 264, 105)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-GUICtrlSetColor(-1, 0xCDD8E0)
-$ModPack1 = GUICtrlCreateCheckbox("LostParadiseArmA3", 265, 277, 180, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetColor(-1, $TextColor)
+$ModPack1 = GUICtrlCreateCheckbox($aMods[1], 265, 277, 180, 25)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetState(-1, $GUI_CHECKED)
-$ModPackOptional = GUICtrlCreateCheckbox("LostParadise Optional", 265, 309, 180, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+$ModPackOptional = GUICtrlCreateCheckbox($aMods[2], 265, 309, 180, 25)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 #cs
 ; Gruppe Repository
 $RepoGroup = GUICtrlCreateGroup("Repository-Auswahl", 258, 370, 264, 105)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-GUICtrlSetColor(-1, 0xCDD8E0)
+GUICtrlSetColor(-1, $TextColor)
 $RepoLife = GUICtrlCreateCheckbox("Hohenstein-Life", 265, 389, 180, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 $RepoDev = GUICtrlCreateCheckbox("Hohenstein-Life Dev", 265, 421, 180, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlSetState(-1, @SW_HIDE)
 
 ; Gruppe Dev
 $DevGroup = GUICtrlCreateGroup("Dev", 524, 253, 172, 222)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-GUICtrlSetColor(-1, 0xCDD8E0)
+GUICtrlSetColor(-1, $TextColor)
 $ListRepos = GUICtrlCreateButton("ListRepos", 538, 277, 143, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetTip(-1, "List Repos")
 $ListRepos = GUICtrlCreateButton("EditRepos", 538, 309, 143, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetTip(-1, "Edit Repos")
 $SyncDev = GUICtrlCreateButton("SyncDev", 538, 389, 143, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetTip(-1, "Sync Dev Repo")
 $SyncDev = GUICtrlCreateButton("Start Arma mit Dev", 538, 421, 143, 25)
-GUICtrlSetBkColor(-1, 0x252729)
+GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetTip(-1, "Starte Arma mit Dev Repo")
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlSetState(-1, @SW_HIDE)
@@ -286,6 +294,12 @@ While 1
 			_SyncButtonClick()
 		Case $LPLaunchButton
 			FileDelete($sTempIni)
+		Case $LauncherTab
+			GUICtrlSetState($hTab1, $GUI_SHOW)
+			GUICtrlSetState($hTab2, $GUI_HIDE)
+		Case $OptionenTab
+			GUICtrlSetState($hTab2, $GUI_SHOW)
+			GUICtrlSetState($hTab1, $GUI_HIDE)
 
 		Case $ShowScriptErrors
 			_UpdateParameters()
@@ -540,6 +554,6 @@ Func _GUICtrlPic_Create($sFilename, $iLeft, $iTop, $iWidth = -1, $iHeight = -1, 
 	Return $idPic
 EndFunc   ;==>_GUICtrlPic_Create
 
-;FileDelete($sTempIni)
+FileDelete($sTempIni)
 
 
