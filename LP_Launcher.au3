@@ -214,17 +214,13 @@ GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ; Gruppe Mod-Auswahl
-Local $sMods = IniRead($sTempIni, "Serverdata", "mod", "")
-Local $aMods = StringSplit($sMods, ";")
-
-
 GUICtrlCreateGroup("Mod-Auswahl", 258, 253, 264, 105)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 GUICtrlSetColor(-1, $TextColor)
-$ModPack1 = GUICtrlCreateCheckbox($aMods[1], 265, 277, 180, 25)
+$ModPack1 = GUICtrlCreateCheckbox("Lostparadise Arma3", 265, 277, 180, 25)
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetState(-1, $GUI_CHECKED)
-$ModPackOptional = GUICtrlCreateCheckbox($aMods[2], 265, 309, 180, 25)
+$ModPackOptional = GUICtrlCreateCheckbox("Lostparadise Optional", 265, 309, 180, 25)
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
