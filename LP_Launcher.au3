@@ -51,7 +51,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 Local $BKColor = IniRead($sTempIni, "Launcher", "BKColor", $IniDefaultwert)
 Local $TextColor = IniRead($sTempIni, "Launcher", "TextColor", $IniDefaultwert)
 
-MsgBox(0,"Color", $BKColor & " - " & $TextColor)
+;MsgBox(0,"Color", $BKColor & " - " & $TextColor)
 
 ; GUI erstellen
 $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
