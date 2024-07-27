@@ -538,9 +538,27 @@ Func _UpdateArma3SyncButtonClick()
 			ExitLoop
 		EndIf
 
-		$sOutput &= $sLine
-		GUICtrlSetData($Output, $sOutput)
-		_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
+		If $sLine <> "" Then
+
+			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
+			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
+				; Zeige alle Zeilen an
+				$sOutput &= $sLine
+			Else
+				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
+				If StringInStr($sLine, "update available") Then
+					$sOutput &= $sLine
+				EndIf
+			EndIf
+			#cs
+			            ; Begrenze Länge von $sOutput auf 1.000 Zeichen
+			            If StringLen($sOutput) > 1000 Then
+			                $sOutput = StringTrimLeft($sOutput, StringLen($sOutput) - 1000)
+			            EndIf
+			#ce
+			GUICtrlSetData($Output, $sOutput)
+			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
+		EndIf
 
 		Sleep(50) ; CPU entlasten
 	WEnd
