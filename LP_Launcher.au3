@@ -370,7 +370,7 @@ EndFunc   ;==>_Exit
 #cs
 #ce
 Func _SyncButtonClick()
-	Local $sOutput = $sBanner & @CRLF & "Synchronisation gestartet"
+	Local $sOutput = "Synchronisation gestartet"
 	Local $iExitStatus = 0
 	Local $sExitMessage = "Sync completed successfully."
 
@@ -432,19 +432,23 @@ Func _SyncButtonClick()
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
 				If StringInStr($sLine, "Number of files to update") Then
-					$sLine = StringReplace($sLine, "Number of files to update = ",@CRLF & "Anzahl der änderbaren Dateien = ")
-					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ",@CRLF & "Herunterladen abgeschlossen: ")
-					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Synchronization with repository") Then
-					$sLine = StringReplace($sLine, "Synchronization with repository",@CRLF & "Synchronisation mit Repository ")
+					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der änderbaren Dateien = ")
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "Number of files to delete") Then
-					$sLine = StringReplace($sLine, "Number of files to delete",@CRLF & "Anzahl der löschbaren Dateien")
+					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der löschbaren Dateien")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Download complete") Then
+					$sLine = StringReplace($sLine, "Download complete: ","Herunterladen abgeschlossen:" & @CRLF)
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Synchronization with repository") Then
+					$sLine = StringReplace($sLine, "Synchronization with repository ","Synchronisation mit Repository ")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Update files size:") Then
+					$sLine = StringReplace($sLine, "Update files size:","Aktualisiere Dateigröße:")
 					$sOutput &= $sLine
 				EndIf
 
