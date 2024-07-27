@@ -231,7 +231,7 @@ GUICtrlCreateGroup("", -99, -99, 1, 1)
 ; Gruppe Reparatur
 GUICtrlCreateGroup("Reparatur", 524, 178, 172, 65)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
-$Arma3SyncDebug = GUICtrlCreateButton("Überprüfe Daten", 538, 202, 143, 25)
+$Arma3SyncCheck = GUICtrlCreateButton("Überprüfe Daten", 538, 202, 143, 25)
 GUICtrlSetTip(-1, "Überprüft alle Mod-Daten")
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetColor(-1, $TextColor)
@@ -550,12 +550,7 @@ Func _UpdateArma3SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 			EndIf
-			#cs
-			            ; Begrenze Länge von $sOutput auf 1.000 Zeichen
-			            If StringLen($sOutput) > 1000 Then
-			                $sOutput = StringTrimLeft($sOutput, StringLen($sOutput) - 1000)
-			            EndIf
-			#ce
+
 			GUICtrlSetData($Output, $sOutput)
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
