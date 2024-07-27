@@ -133,16 +133,16 @@ Local $InetHTMLid = IniRead($sTempIni, "Launcher", "InetHTMLid", $IniDefaultwert
 
 $oIE.navigate($Inet)
 While $oIE.ReadyState <> 4
-    Sleep(50)
+	Sleep(50)
 WEnd
 Local $oDoc = $oIE.document
 Local $oElement = $oDoc.getElementById($InetHTMLid)
 
 If IsObj($oElement) Then
-    Local $innerHTML = $oElement.outerHTML
-    $oDoc.body.innerHTML = $innerHTML
+	Local $innerHTML = $oElement.outerHTML
+	$oDoc.body.innerHTML = $innerHTML
 Else
-    ;MsgBox(0, "Fehler", "Das Element mit der ID " & $InetHTMLid & " wurde nicht gefunden.")
+	;MsgBox(0, "Fehler", "Das Element mit der ID " & $InetHTMLid & " wurde nicht gefunden.")
 EndIf
 
 ; Erstellung 2 Reiter
@@ -431,7 +431,16 @@ Func _SyncButtonClick()
 				$sOutput &= $sLine
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
-				If StringInStr($sLine, "Number of files to") Or StringInStr($sLine, "Download complete:") Then
+				If StringInStr($sLine, "update available") Then
+					$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der änderbaren Dateien = ")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Download complete") Then
+					$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Synchronization with repository") Then
+					$sLine = StringReplace($sLine, "Synchronization with repository", "Synchronisation mit Repository ")
 					$sOutput &= $sLine
 				EndIf
 			EndIf
@@ -445,7 +454,7 @@ Func _SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		Sleep(10) ; CPU entlasten
+		;Sleep(10) ; CPU entlasten
 	WEnd
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
@@ -545,18 +554,36 @@ Func _UpdateArma3SyncButtonClick()
 				; Zeige alle Zeilen an
 				$sOutput &= $sLine
 			Else
-				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
+				; Überprüfen, ob die Zeile das Schlüsselwort "update available" enthält
 				If StringInStr($sLine, "update available") Then
+					$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der änderbaren Dateien = ")
 					$sOutput &= $sLine
 				EndIf
+				If StringInStr($sLine, "Download complete") Then
+					$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "Synchronization with repository") Then
+					$sLine = StringReplace($sLine, "Synchronization with repository", "Synchronisation mit Repository ")
+					$sOutput &= $sLine
+				EndIf
+
+
+
+
 			EndIf
 
+			; Ersetzen der spezifischen Zeichenkette
+
+
+			; Ausgabe der geänderten Zeile
 			GUICtrlSetData($Output, $sOutput)
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		Sleep(10) ; CPU entlasten
+		;Sleep(10) ; CPU entlasten
 	WEnd
+
 
 	GUICtrlSetState($SyncButton, $GUI_ENABLE)
 	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
