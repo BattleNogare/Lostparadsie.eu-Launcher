@@ -371,7 +371,7 @@ EndFunc   ;==>_Exit
 #ce
 Func _SyncButtonClick()
 	Local $sOutput = ""
-	$sOutput = "Synchronisation gestartet" & @CRLF
+	$sOutput = "Synchronisation gestartet..." & @CRLF
 	Local $iExitStatus = 0
 	Local $sExitMessage = "Sync completed successfully."
 
@@ -432,35 +432,34 @@ Func _SyncButtonClick()
 				$sOutput &= $sLine
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
-				If StringInStr($sLine, "Number of files to update") Then
-					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der geänderten Dateien = ")
+				If StringInStr($sLine, "Number of files to update", 0, 4) Then
+					$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der geänderten Dateien = ", 1)
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Number of files to delete") Then
-					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der gelöschten Dateien")
+				ElseIf StringInStr($sLine, "Number of files to delete", 0, 4) Then
+					$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien", 1)
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ","Herunterladen abgeschlossen:")
+				ElseIf StringInStr($sLine, "Download complete", 0, 4) Then
+					$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen:", 1)
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Synchronization with repository") Then
-					$sLine = StringReplace($sLine, "Synchronization with repository ","Synchronisation mit Repository ")
+				ElseIf StringInStr($sLine, "Synchronization with repository", 0, 4) Then
+					$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ", 1)
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Update files size:") Then
-					$sLine = StringReplace($sLine, "Update files size:","Aktualisiere Dateigröße:")
+				ElseIf StringInStr($sLine, "Update files size", 0, 4) Then
+					$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:", 1)
 					$sOutput &= $sLine
 				EndIf
-
-
 			EndIf
+
+			; Begrenze Länge von $sOutput auf 1.000 Zeichen
 			#cs
-			            ; Begrenze Länge von $sOutput auf 1.000 Zeichen
-			            If StringLen($sOutput) > 1000 Then
-			                $sOutput = StringTrimLeft($sOutput, StringLen($sOutput) - 1000)
-			            EndIf
+			If StringLen($sOutput) > 1000 Then
+			    $sOutput = StringTrimLeft($sOutput, StringLen($sOutput) - 1000)
+			EndIf
 			#ce
+
 			GUICtrlSetData($Output, $sOutput)
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
-
 		;Sleep(20) ; CPU entlasten
 	WEnd
 
@@ -542,7 +541,7 @@ Func _UpdateArma3SyncButtonClick()
 	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -UPDATE' ; Arma3Sync Update-CMD-Befehl
 	;MsgBox(0,"SyncUpdate", $sCommand2)
 	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-	Local $sOutput = "Arma3Sync Update gestartet"
+	Local $sOutput = "Arma3Sync Update gestartet" & @CRLF
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
 	While 1
@@ -567,11 +566,11 @@ Func _UpdateArma3SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "ArmA3Sync Available update version =") Then
-					$sLine = StringReplace($sLine, "ArmA3Sync Available update version =", "Verfügbare Online-ArmA3Sync Version =")
+					$sLine = StringReplace($sLine, "ArmA3Sync Available update version =", @CRLF & "Verfügbare Online-ArmA3Sync Version =")
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "No new update available.") Then
-					$sLine = StringReplace($sLine, "No new update available.", "Keine neue Version von Arma3Sync gefunden")
+					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von Arma3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
 
