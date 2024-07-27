@@ -435,16 +435,20 @@ Func _SyncButtonClick()
 				If StringInStr($sLine, "Number of files to update") Then
 					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der geänderten Dateien = ")
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Number of files to delete") Then
+				EndIf
+					If StringInStr($sLine, "Number of files to delete") Then
 					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der gelöschten Dateien")
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Download complete") Then
+				EndIf
+					If StringInStr($sLine, "Download complete") Then
 					$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen:")
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Synchronization with repository") Then
+				EndIf
+					If StringInStr($sLine, "Synchronization with repository") Then
 					$sLine = StringReplace($sLine, "Synchronization with repository ","Synchronisation mit Repository ")
 					$sOutput &= $sLine
-				ElseIf StringInStr($sLine, "Update files size") Then
+				EndIf
+					If StringInStr($sLine, "Update files size") Then
 					$sLine = StringReplace($sLine, "Update files size:","Aktualisierte Dateigröße:")
 					$sOutput &= $sLine
 				EndIf
