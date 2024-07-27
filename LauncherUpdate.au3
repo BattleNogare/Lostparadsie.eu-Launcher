@@ -62,6 +62,16 @@ If $OnlineVersion <> $ClientVersion Then
 	GUICtrlSetFont($progresstext, 10, 400)
 	GUISetState(@SW_SHOW, $updatefenster)
 
+	FileDelete(@WorkingDir & "\download.exe")
+	FileDelete(@WorkingDir & "\LP_Launcher.exe")
+	FileDelete(@WorkingDir & "\LP-Data\background.jpg")
+	FileDelete(@WorkingDir & "\LP-Data\LP-Logo.png")
+	FileDelete(@WorkingDir & "\LP-Data\syncdata.png")
+	FileDelete(@WorkingDir & "\LP-Data\syncdata-stop.png")
+	FileDelete(@WorkingDir & "\LP-Data\lostparadisestart.png")
+	FileDelete(@WorkingDir & "\LP-Data\LPicon.ico")
+	FileDelete(@WorkingDir & "\LP-Data\LauncherText.txt")
+
 	Local $aPID[7]
 
 	Local $sDownloadExe = @WorkingDir & "\download.exe"

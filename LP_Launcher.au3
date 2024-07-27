@@ -431,12 +431,12 @@ Func _SyncButtonClick()
 				$sOutput &= $sLine
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
-				If StringInStr($sLine, "update available") Then
+				If StringInStr($sLine, "Number of files to update") Then
 					$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der änderbaren Dateien = ")
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
+					$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen: ")
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "Synchronization with repository") Then
