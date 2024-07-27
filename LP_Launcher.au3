@@ -65,8 +65,14 @@ GUISetIcon(@WorkingDir & "\LP-Data\LPicon.ico")
 $background = GUICtrlCreatePic(@WorkingDir & "\LP-Data\background.jpg", 0, 0, 800, 570)
 GUICtrlSetState(-1, $GUI_DISABLE)
 
+; Top Buttons
 $LauncherTab = GUICtrlCreateButton("Launcher", 2, 2, 60, 18)
 $OptionenTab = GUICtrlCreateButton("Optionen", 62, 2, 60, 18)
+$Dashboard = GUICtrlCreateButton("Dashboard", 378, 2, 80, 18)
+$Wiki = GUICtrlCreateButton("Wiki", 458, 2, 80, 18)
+$ControlPanel = GUICtrlCreateButton("ControlPanel", 538, 2, 80, 18)
+$TeamSpeak = GUICtrlCreateButton("TeamSpeak", 618, 2, 80, 18)
+$Discord = GUICtrlCreateButton("Discord", 698, 2, 80, 18)
 
 ; Exit Button
 $ButtonExit = GUICtrlCreateLabel("X", 780, 2, 18, 18, $SS_CENTER + $SS_CENTERIMAGE)
@@ -319,6 +325,27 @@ While 1
 		Case $OptionenTab
 			GUICtrlSetState($hTab2, $GUI_SHOW)
 			GUICtrlSetState($hTab1, $GUI_HIDE)
+		Case $Dashboard
+			$sURL1 = "https://lostparadise.eu/"
+			ShellExecute($sURL1)
+			Sleep(200)
+		Case $Wiki
+			$sURL2 = "https://lostparadise.eu/wcf/lexicon/index.php"
+			ShellExecute($sURL2)
+			Sleep(200)
+		Case $ControlPanel
+			$sURL3 = "https://lostparadise.eu/controlpanel/index.php"
+			ShellExecute($sURL3)
+			Sleep(200)
+		Case $TeamSpeak
+			$sURL4 = "ts3server://ts.lostparadise.eu?port=9987"
+			ShellExecute($sURL4)
+			Sleep(200)
+		Case $Discord
+			$sURL5 = "https://discord.gg/sKTYkSJMTd"
+			ShellExecute($sURL5)
+			Sleep(200)
+
 
 		Case $ShowScriptErrors
 			_UpdateParameters()
@@ -436,11 +463,11 @@ Func _SyncButtonClick()
 					Case StringInStr($sLine, "Number of files to update")
 						$sLine = StringReplace($sLine, "Number of files to update = ",@CRLF & "Anzahl der geänderten Dateien = ")
 						$sOutput &= $sLine
-					Case StringInStr($sLine, "Number of files to delete")
-						$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
-						$sOutput &= $sLine
+					;Case StringInStr($sLine, "Number of files to delete")
+					;	$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
+					;	$sOutput &= $sLine
 					Case StringInStr($sLine, "Download complete")
-						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen:")
+						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen: ")
 						$sOutput &= $sLine
 					Case StringInStr($sLine, "Synchronization with repository")
 						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
@@ -543,7 +570,7 @@ Func _UpdateArma3SyncButtonClick()
 	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -UPDATE' ; Arma3Sync Update-CMD-Befehl
 	;MsgBox(0,"SyncUpdate", $sCommand2)
 	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-	Local $sOutput = "Arma3Sync Update gestartet" & @CRLF
+	Local $sOutput = "Arma3Sync Update gestartet..." & @CRLF
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
 	While 1
@@ -572,7 +599,7 @@ Func _UpdateArma3SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "No new update available.") Then
-					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von Arma3Sync gefunden")
+					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von ArmA3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
 
