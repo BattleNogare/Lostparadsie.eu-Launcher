@@ -540,8 +540,6 @@ Func _UpdateArma3SyncButtonClick()
 
 		If $sLine <> "" Then
 
-			MsgBox(0,"Test","Debug Status= "& GUICtrlRead($Arma3SyncDebug))
-
 			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
 			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
 				; Zeige alle Zeilen an
