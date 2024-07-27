@@ -370,7 +370,8 @@ EndFunc   ;==>_Exit
 #cs
 #ce
 Func _SyncButtonClick()
-	Local $sOutput = "Synchronisation gestartet"
+	Local $sOutput = ""
+	$sOutput = "Synchronisation gestartet" & @CRLF
 	Local $iExitStatus = 0
 	Local $sExitMessage = "Sync completed successfully."
 
@@ -440,7 +441,7 @@ Func _SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ","Herunterladen abgeschlossen:" & @CRLF)
+					$sLine = StringReplace($sLine, "Download complete: ","Herunterladen abgeschlossen:")
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "Synchronization with repository") Then
@@ -464,7 +465,7 @@ Func _SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		;Sleep(10) ; CPU entlasten
+		Sleep(20) ; CPU entlasten
 	WEnd
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
@@ -564,21 +565,19 @@ Func _UpdateArma3SyncButtonClick()
 				; Zeige alle Zeilen an
 				$sOutput &= $sLine
 			Else
-				; Überprüfen, ob die Zeile das Schlüsselwort "update available" enthält
-				If StringInStr($sLine, "update available") Then
-					$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der änderbaren Dateien = ")
+				; Überprüfen, ob die Zeile das Schlüsselwort enthält
+				If StringInStr($sLine, "ArmA3Sync Installed version =") Then
+					$sLine = StringReplace($sLine, "ArmA3Sync Installed version =", "Installierte ArmA3Sync Version =")
 					$sOutput &= $sLine
 				EndIf
-				If StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
+				If StringInStr($sLine, "ArmA3Sync Available update version =") Then
+					$sLine = StringReplace($sLine, "ArmA3Sync Available update version =", "Verfügbare Online-ArmA3Sync Version =")
 					$sOutput &= $sLine
 				EndIf
-				If StringInStr($sLine, "Synchronization with repository") Then
-					$sLine = StringReplace($sLine, "Synchronization with repository", "Synchronisation mit Repository ")
+				If StringInStr($sLine, "No new update available.") Then
+					$sLine = StringReplace($sLine, "No new update available.", "Keine neue Version von Arma3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
-
-
 
 
 			EndIf
