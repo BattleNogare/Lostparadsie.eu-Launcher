@@ -383,6 +383,9 @@ While 1
 			EndIf
 		Case $Arma3SyncUpdate
 			_UpdateArma3SyncButtonClick()
+		Case $Arma3SyncCheck
+			_CheckArma3SyncRepoClick()
+
 
 	EndSwitch
 	Sleep(50)
@@ -566,6 +569,7 @@ Func _UpdateArma3SyncButtonClick()
 	GUICtrlSetState($SyncButton, $GUI_DISABLE)
 	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
+	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
 
 	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -UPDATE' ; Arma3Sync Update-CMD-Befehl
 	;MsgBox(0,"SyncUpdate", $sCommand2)
@@ -579,6 +583,7 @@ Func _UpdateArma3SyncButtonClick()
 			GUICtrlSetState($SyncButton, $GUI_ENABLE)
 			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
 			GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
+			GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 			ExitLoop
 		EndIf
 
@@ -621,8 +626,74 @@ Func _UpdateArma3SyncButtonClick()
 	GUICtrlSetState($SyncButton, $GUI_ENABLE)
 	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
+	GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 EndFunc   ;==>_UpdateArma3SyncButtonClick
 
+
+Func _CheckArma3SyncRepoClick()
+	GUICtrlSetState($SyncButton, $GUI_DISABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
+	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
+	Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
+
+	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK ' & $repositoryname ; Arma3Sync CHECK-CMD-Befehl
+	;MsgBox(0,"SyncUpdate", $sCommand2)
+	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	Local $sOutput = "Arma3Sync Check gestartet..." & @CRLF
+	GUICtrlSetFont($Output, 9, 400, 0, "")
+
+	While 1
+		Local $sLine = StdoutRead($iPID)
+		If @error Then
+			GUICtrlSetState($SyncButton, $GUI_ENABLE)
+			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+			GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
+			GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
+			ExitLoop
+		EndIf
+
+		If $sLine <> "" Then
+
+			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
+			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
+				; Zeige alle Zeilen an
+				$sOutput &= $sLine
+			Else
+				; Überprüfen, ob die Zeile das Schlüsselwort enthält
+				If StringInStr($sLine, "ArmA3Sync Installed version =") Then
+					$sLine = StringReplace($sLine, "ArmA3Sync Installed version =", "Installierte ArmA3Sync Version =")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "ArmA3Sync Available update version =") Then
+					$sLine = StringReplace($sLine, "ArmA3Sync Available update version =", @CRLF & "Verfügbare Online-ArmA3Sync Version =")
+					$sOutput &= $sLine
+				EndIf
+				If StringInStr($sLine, "No new update available.") Then
+					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von ArmA3Sync gefunden")
+					$sOutput &= $sLine
+				EndIf
+
+
+			EndIf
+
+			; Ersetzen der spezifischen Zeichenkette
+
+
+			; Ausgabe der geänderten Zeile
+			GUICtrlSetData($Output, $sOutput)
+			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
+		EndIf
+
+		;Sleep(10) ; CPU entlasten
+	WEnd
+
+
+	GUICtrlSetState($SyncButton, $GUI_ENABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+	GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
+	GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
+EndFunc   ;==>_UpdateArma3SyncButtonClick
 
 Func _GUICtrlPic_Create($sFilename, $iLeft, $iTop, $iWidth = -1, $iHeight = -1, $iStyle = -1, $iExStyle = -1)
 	_GDIPlus_Startup()
