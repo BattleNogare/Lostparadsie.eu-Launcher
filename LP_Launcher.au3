@@ -637,9 +637,9 @@ Func _CheckArma3SyncRepoClick()
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
 	Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 
-	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK ' & $repositoryname ; Arma3Sync CHECK-CMD-Befehl
-	;MsgBox(0,"SyncUpdate", $sCommand2)
-	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK ' & $repositoryname ; Arma3Sync CHECK-CMD-Befehl
+	MsgBox(0,"SyncCheck", $sCommand3)
+	$iPID = Run($sCommand3, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
 	Local $sOutput = "Arma3Sync Check gestartet..." & @CRLF
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
