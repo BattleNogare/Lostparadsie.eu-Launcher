@@ -65,8 +65,6 @@ If $OnlineVersion <> $ClientVersion Then
 	GUISetState(@SW_SHOW, $updatefenster)
 
 
-
-	FileDelete(@WorkingDir & "\download.exe")
 	FileDelete(@WorkingDir & "\LP_Launcher.exe")
 	FileDelete(@WorkingDir & "\LP-Data\background.jpg")
 	FileDelete(@WorkingDir & "\LP-Data\LP-Logo.png")
@@ -76,7 +74,7 @@ If $OnlineVersion <> $ClientVersion Then
 	FileDelete(@WorkingDir & "\LP-Data\LPicon.ico")
 	FileDelete(@WorkingDir & "\LP-Data\LauncherText.txt")
 
-	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Vorherige Dateien gelöscht")
+	FileWrite($hLogFile, $sTimeStamp & " - " & "Vorherige Dateien gelöscht")
 
 	Local $aPID[7]
 
