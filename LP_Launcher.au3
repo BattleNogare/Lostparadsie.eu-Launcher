@@ -371,7 +371,7 @@ EndFunc   ;==>_Exit
 #ce
 Func _SyncButtonClick()
 	Local $sOutput = ""
-	$sOutput = "Synchronisation gestartet..." & @CRLF
+	$sOutput = "Synchronisation gestartet..."
 	Local $iExitStatus = 0
 	Local $sExitMessage = "Sync completed successfully."
 
@@ -434,7 +434,7 @@ Func _SyncButtonClick()
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
 				Select
 					Case StringInStr($sLine, "Number of files to update")
-						$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der geänderten Dateien = ")
+						$sLine = StringReplace($sLine, "Number of files to update = ",@CRLF & "Anzahl der geänderten Dateien = ")
 						$sOutput &= $sLine
 					Case StringInStr($sLine, "Number of files to delete")
 						$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
