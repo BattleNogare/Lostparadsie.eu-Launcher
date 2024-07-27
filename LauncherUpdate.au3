@@ -89,10 +89,12 @@ If $OnlineVersion <> $ClientVersion Then
 		EndIf
 	Next
 
+	FileWrite($ClientVersionFile, $OnlineVersion)
 	FileClose($ClientVersionFile)
 	GUISetState(@SW_HIDE, $updatefenster)
 	Run(@WorkingDir & "\LP_Launcher.exe")
 	;FileDelete($sTempIni)
+
 Else
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Lostparadise Launcher" & @CRLF)
 	Run(@WorkingDir & "\LP_Launcher.exe")

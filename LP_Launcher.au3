@@ -124,7 +124,6 @@ GUICtrlSetData($hInfoLabel, $sInfoFileContent)
 ;GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetColor(-1, $TextColor)
 
-
 ; Dashboard
 Local $oIE = ObjCreate("Shell.Explorer.2")
 Local $IECtrl = GUICtrlCreateObj($oIE, 10, 250, 390, 310)
@@ -143,7 +142,7 @@ If IsObj($oElement) Then
     Local $innerHTML = $oElement.outerHTML
     $oDoc.body.innerHTML = $innerHTML
 Else
-    MsgBox(0, "Fehler", "Das Element mit der ID " & $InetHTMLid & " wurde nicht gefunden.")
+    ;MsgBox(0, "Fehler", "Das Element mit der ID " & $InetHTMLid & " wurde nicht gefunden.")
 EndIf
 
 ; Erstellung 2 Reiter
