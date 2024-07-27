@@ -410,7 +410,7 @@ Func _SyncButtonClick()
 	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
 
 	Local $sCommand = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -SYNC "' & $repositoryname & '" "C:\Program Files (x86)\Steam\steamapps\common\Arma 3" False'
-	MsgBox(0,"SyncUpdate", $sCommand)
+	;MsgBox(0,"SyncUpdate", $sCommand)
 	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
 
 	If @error Then
@@ -464,11 +464,11 @@ Func _SyncButtonClick()
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
 				Select
 					Case StringInStr($sLine, "Number of files to update")
-						$sLine = StringReplace($sLine, "Number of files to update = ",@CRLF & "Anzahl der geänderten Dateien = ")
+						$sLine = StringReplace($sLine, "Number of files to update = ", @CRLF & "Anzahl der geänderten Dateien = ")
 						$sOutput &= $sLine
-					;Case StringInStr($sLine, "Number of files to delete")
-					;	$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
-					;	$sOutput &= $sLine
+						;Case StringInStr($sLine, "Number of files to delete")
+						;	$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
+						;	$sOutput &= $sLine
 					Case StringInStr($sLine, "Download complete")
 						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen: ")
 						$sOutput &= $sLine
@@ -492,7 +492,7 @@ Func _SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		Sleep(10) ; CPU entlasten
+		;Sleep(10) ; CPU entlasten
 	WEnd
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
@@ -621,7 +621,7 @@ Func _UpdateArma3SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		Sleep(10) ; CPU entlasten
+		;Sleep(10) ; CPU entlasten
 	WEnd
 
 
@@ -639,7 +639,7 @@ Func _CheckArma3SyncRepoClick()
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
 
 
-	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK "' & $repositoryname & '"'; Arma3Sync CHECK-CMD-Befehl
+	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK "' & $repositoryname & '"' ; Arma3Sync CHECK-CMD-Befehl
 	;MsgBox(0,"SyncCheck", $sCommand3)
 	$iPID = Run($sCommand3, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
 	GUICtrlSetState($hTab1, $GUI_SHOW)
@@ -673,7 +673,7 @@ Func _CheckArma3SyncRepoClick()
 	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
-EndFunc   ;==>_UpdateArma3SyncButtonClick
+EndFunc   ;==>_CheckArma3SyncRepoClick
 
 Func _GUICtrlPic_Create($sFilename, $iLeft, $iTop, $iWidth = -1, $iHeight = -1, $iStyle = -1, $iExStyle = -1)
 	_GDIPlus_Startup()
