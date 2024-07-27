@@ -15,6 +15,8 @@
 #include <StaticConstants.au3>
 #include <ProgressConstants.au3>
 
+#AutoIt3Wrapper_icon=LPicon.ico
+
 ; Log-Datei
 Local $sLogFilePath = @WorkingDir & "\LP-Data\Launcher-Log.txt"
 Local $hLogFile = FileOpen($sLogFilePath, 9)
