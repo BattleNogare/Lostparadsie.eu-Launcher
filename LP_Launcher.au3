@@ -50,8 +50,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 
 Local $BKColor = IniRead($sTempIni, "Launcher", "BKColor", $IniDefaultwert)
 Local $TextColor = IniRead($sTempIni, "Launcher", "TextColor", $IniDefaultwert)
-
-;MsgBox(0,"Color", $BKColor & " - " & $TextColor)
+Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 
 ; GUI erstellen
 $Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
@@ -410,7 +409,8 @@ Func _SyncButtonClick()
 	GUICtrlSetState($SyncButtonCancel, $GUI_DISABLE)
 	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
 
-	Local $sCommand = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -SYNC "[GER] LostParadise - HohensteinLife - DEVELOPMENT" "C:\Program Files (x86)\Steam\steamapps\common\Arma 3" False'
+	Local $sCommand = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -SYNC "' & $repositoryname & '" "C:\Program Files (x86)\Steam\steamapps\common\Arma 3" False'
+	MsgBox(0,"SyncUpdate", $sCommand)
 	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
 
 	If @error Then
@@ -492,7 +492,7 @@ Func _SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		;Sleep(20) ; CPU entlasten
+		Sleep(10) ; CPU entlasten
 	WEnd
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
@@ -621,7 +621,7 @@ Func _UpdateArma3SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		;Sleep(10) ; CPU entlasten
+		Sleep(10) ; CPU entlasten
 	WEnd
 
 
@@ -637,7 +637,7 @@ Func _CheckArma3SyncRepoClick()
 	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
-	Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
+
 
 	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK "' & $repositoryname & '"'; Arma3Sync CHECK-CMD-Befehl
 	;MsgBox(0,"SyncCheck", $sCommand3)
@@ -665,7 +665,7 @@ Func _CheckArma3SyncRepoClick()
 		_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 
 
-		;Sleep(10) ; CPU entlasten
+		Sleep(50) ; CPU entlasten
 	WEnd
 
 
