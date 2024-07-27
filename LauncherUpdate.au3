@@ -64,6 +64,8 @@ If $OnlineVersion <> $ClientVersion Then
 	GUICtrlSetFont($progresstext, 10, 400)
 	GUISetState(@SW_SHOW, $updatefenster)
 
+
+
 	FileDelete(@WorkingDir & "\download.exe")
 	FileDelete(@WorkingDir & "\LP_Launcher.exe")
 	FileDelete(@WorkingDir & "\LP-Data\background.jpg")
@@ -73,6 +75,8 @@ If $OnlineVersion <> $ClientVersion Then
 	FileDelete(@WorkingDir & "\LP-Data\lostparadisestart.png")
 	FileDelete(@WorkingDir & "\LP-Data\LPicon.ico")
 	FileDelete(@WorkingDir & "\LP-Data\LauncherText.txt")
+
+	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Vorherige Dateien gelöscht")
 
 	Local $aPID[7]
 
