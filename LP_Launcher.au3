@@ -433,22 +433,18 @@ Func _SyncButtonClick()
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
 				If StringInStr($sLine, "Number of files to update") Then
-					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der änderbaren Dateien = ")
+					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der geänderten Dateien = ")
 					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Number of files to delete") Then
-					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der löschbaren Dateien")
+				ElseIf StringInStr($sLine, "Number of files to delete") Then
+					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der gelöschten Dateien")
 					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Download complete") Then
+				ElseIf StringInStr($sLine, "Download complete") Then
 					$sLine = StringReplace($sLine, "Download complete: ","Herunterladen abgeschlossen:")
 					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Synchronization with repository") Then
+				ElseIf StringInStr($sLine, "Synchronization with repository") Then
 					$sLine = StringReplace($sLine, "Synchronization with repository ","Synchronisation mit Repository ")
 					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "Update files size:") Then
+				ElseIf StringInStr($sLine, "Update files size:") Then
 					$sLine = StringReplace($sLine, "Update files size:","Aktualisiere Dateigröße:")
 					$sOutput &= $sLine
 				EndIf
@@ -546,7 +542,7 @@ Func _UpdateArma3SyncButtonClick()
 	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -UPDATE' ; Arma3Sync Update-CMD-Befehl
 	;MsgBox(0,"SyncUpdate", $sCommand2)
 	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-	Local $sOutput = ""
+	Local $sOutput = "Arma3Sync Update gestartet"
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
 	While 1
