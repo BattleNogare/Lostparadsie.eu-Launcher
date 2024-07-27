@@ -79,7 +79,7 @@ If $OnlineVersion <> $ClientVersion Then
 	Sleep(100)
 	Run('"' & $sDownloadExe & '" "LPicon.ico" "LPicon_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
-	Run('"' & $sDownloadExe & '" "LauncherText" "LauncherText_dest" "' & $sTempIni & '"', @ScriptDir)
+	Run('"' & $sDownloadExe & '" "LauncherText.txt" "LauncherText_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
 
 

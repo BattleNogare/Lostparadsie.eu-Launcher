@@ -118,7 +118,7 @@ GUICtrlSetFont(-1, 12, 400, 0, "")
 ;GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetColor(-1, $TextColor)
 
-Local $sInfoFilePath = @WorkingDir & "\LP-Data\LPInfos.txt"
+Local $sInfoFilePath = @WorkingDir & "\LP-Data\LauncherText.txt"
 Local $sInfoFileContent = FileRead($sInfoFilePath)
 GUICtrlSetData($hInfoLabel, $sInfoFileContent)
 ;GUICtrlSetBkColor(-1, $BKColor)
@@ -129,12 +129,26 @@ GUICtrlSetColor(-1, $TextColor)
 Local $oIE = ObjCreate("Shell.Explorer.2")
 Local $IECtrl = GUICtrlCreateObj($oIE, 10, 250, 390, 310)
 
-$oIE.navigate("https://lostparadise.eu/wcf/lexicon/index.php?entry/31-serverrestarts-wann-sind-diese/") ;Website
+Local $Inet = IniRead($sTempIni, "Launcher", "Inet", $IniDefaultwert)
+Local $InetHTMLid = IniRead($sTempIni, "Launcher", "InetHTMLid", $IniDefaultwert)
+
+$oIE.navigate($Inet)
 While $oIE.ReadyState <> 4
-	Sleep(50)
+    Sleep(50)
 WEnd
 Local $oDoc = $oIE.document
-$oDoc.parentWindow.execScript("document.body.innerHTML = document.getElementById('lexiconEntryContent').outerHTML;")
+Local $oElement = $oDoc.getElementById($InetHTMLid)
+
+If IsObj($oElement) Then
+    Local $innerHTML = $oElement.outerHTML
+    $oDoc.body.innerHTML = $innerHTML
+Else
+    MsgBox(0, "Fehler", "Das Element mit der ID " & $InetHTMLid & " wurde nicht gefunden.")
+EndIf
+
+; Erstellung 2 Reiter
+$hTab2 = GUICtrlCreateTabItem("Optionen")
+GUICtrlSetColor(-1, $TextColor)
 
 ;Erstellung 2 Reiter
 $hTab2 = GUICtrlCreateTabItem("Optionen")
@@ -207,10 +221,19 @@ GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 ; Gruppe Debug
-GUICtrlCreateGroup("Debug", 524, 103, 172, 65)
+GUICtrlCreateGroup("Debug", 524, 104, 172, 65)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 $Arma3SyncDebug = GUICtrlCreateCheckbox("Debug", 533, 128, 60, 25)
 GUICtrlSetTip(-1, "Zeigt alles im Ausgabefeld an")
+GUICtrlSetBkColor(-1, $BKColor)
+GUICtrlSetColor(-1, $TextColor)
+GUICtrlCreateGroup("", -99, -99, 1, 1)
+
+; Gruppe Reparatur
+GUICtrlCreateGroup("Reparatur", 524, 178, 172, 65)
+GUICtrlSetFont(-1, 12, 400, 0, "Arial")
+$Arma3SyncDebug = GUICtrlCreateButton("Überprüfe Daten", 538, 202, 143, 25)
+GUICtrlSetTip(-1, "Überprüft alle Mod-Daten")
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetColor(-1, $TextColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
@@ -257,7 +280,6 @@ GUICtrlSetTip(-1, "Starte Arma mit Dev Repo")
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlSetState(-1, @SW_HIDE)
 #ce
-
 
 GUICtrlCreateTabItem("")
 
