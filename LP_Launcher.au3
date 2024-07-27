@@ -432,26 +432,23 @@ Func _SyncButtonClick()
 				$sOutput &= $sLine
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
-				If StringInStr($sLine, "Number of files to update") Then
-					$sLine = StringReplace($sLine, "Number of files to update = ","Anzahl der geänderten Dateien = ")
-					$sOutput &= $sLine
-				EndIf
-					If StringInStr($sLine, "Number of files to delete") Then
-					$sLine = StringReplace($sLine, "Number of files to delete","Anzahl der gelöschten Dateien")
-					$sOutput &= $sLine
-				EndIf
-					If StringInStr($sLine, "Download complete") Then
-					$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen:")
-					$sOutput &= $sLine
-				EndIf
-					If StringInStr($sLine, "Synchronization with repository") Then
-					$sLine = StringReplace($sLine, "Synchronization with repository ","Synchronisation mit Repository ")
-					$sOutput &= $sLine
-				EndIf
-					If StringInStr($sLine, "Update files size") Then
-					$sLine = StringReplace($sLine, "Update files size:","Aktualisierte Dateigröße:")
-					$sOutput &= $sLine
-				EndIf
+				Select
+					Case StringInStr($sLine, "Number of files to update")
+						$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der geänderten Dateien = ")
+						$sOutput &= $sLine
+					Case StringInStr($sLine, "Number of files to delete")
+						$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
+						$sOutput &= $sLine
+					Case StringInStr($sLine, "Download complete")
+						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen:")
+						$sOutput &= $sLine
+					Case StringInStr($sLine, "Synchronization with repository")
+						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
+						$sOutput &= $sLine
+					Case StringInStr($sLine, "Update files size")
+						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
+						$sOutput &= $sLine
+				EndSelect
 
 
 			EndIf
