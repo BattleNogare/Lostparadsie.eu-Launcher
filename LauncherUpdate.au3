@@ -73,6 +73,7 @@ If $OnlineVersion <> $ClientVersion Then
 	FileDelete(@WorkingDir & "\LP-Data\lostparadisestart.png")
 	FileDelete(@WorkingDir & "\LP-Data\LPicon.ico")
 	FileDelete(@WorkingDir & "\LP-Data\LauncherText.txt")
+	FileDelete(@WorkingDir & "\LP-Data\lostparadisestartdisabled.png")
 
 	FileWrite($hLogFile, $sTimeStamp & " - " & "Vorherige Dateien gelöscht")
 
@@ -90,6 +91,8 @@ If $OnlineVersion <> $ClientVersion Then
 	Run('"' & $sDownloadExe & '" "syncdata-stop.png" "syncdata-stop_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
 	Run('"' & $sDownloadExe & '" "lostparadisestart.png" "lostparadisestart_dest" "' & $sTempIni & '"', @ScriptDir)
+	Sleep(100)
+		Run('"' & $sDownloadExe & '" "lostparadisestartdisabled.png" "lostparadisestartdisabled_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
 	Run('"' & $sDownloadExe & '" "LPicon.ico" "LPicon_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)

@@ -93,12 +93,16 @@ GUICtrlSetState(-1, $GUI_DISABLE)
 $SyncButton = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\syncdata.png", 494, 505, 144, 54)
 
 ; Button Sync-Cancel
-$SyncButtonCancel = GUICtrlCreatePic(@WorkingDir & "\LP-Data\syncdata-stop.png", 494, 505, 144, 54)
+$SyncButtonCancel = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\syncdata-stop.png", 494, 505, 144, 54)
 GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
 
 ;Button Launch
 $LPLaunchButton = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\lostparadisestart.png", 642, 505, 144, 54)
-GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+
+;Button Launch-Disabled
+$LPLaunchButtonDisabled = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\lostparadisestartdisabled.png", 642, 505, 144, 54)
+GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 
 
 
@@ -406,8 +410,8 @@ Func _SyncButtonClick()
 
 	GUICtrlSetState($SyncButton, $GUI_HIDE)
 	GUICtrlSetState($SyncButtonCancel, $GUI_SHOW)
-	GUICtrlSetState($SyncButtonCancel, $GUI_DISABLE)
-	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 
 	Local $sCommand = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -SYNC "' & $repositoryname & '" "C:\Program Files (x86)\Steam\steamapps\common\Arma 3" False'
 	;MsgBox(0,"SyncUpdate", $sCommand)
@@ -421,17 +425,18 @@ Func _SyncButtonClick()
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
 	While 1
-		#cs
+
 		      Switch GUIGetMsg()
 		          Case $SyncButtonCancel
 		              GUICtrlSetState($SyncButton, $GUI_SHOW)
 		              GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
-		              GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+		              GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+					  GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 		              $iExitStatus = 1
 		              $sExitMessage = "Sync was cancelled by user."
 		              ExitLoop
 		      EndSwitch
-		#ce
+
 
 		Local $sLine = StdoutRead($iPID)
 
@@ -448,7 +453,8 @@ Func _SyncButtonClick()
 			EndSwitch
 			GUICtrlSetState($SyncButton, $GUI_SHOW)
 			GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
-			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+			GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+			GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 			$iExitStatus = 2
 			$sExitMessage = "Error: " & $iError & " - " & $sErrorDesc
 			ExitLoop
@@ -497,7 +503,8 @@ Func _SyncButtonClick()
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
-	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 EndFunc   ;==>_SyncButtonClick
 
 
@@ -508,7 +515,8 @@ Func _SyncButtonCancelClick()
 	EndIf
 	GUICtrlSetState($SyncButton, $GUI_ENABLE)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
-	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 EndFunc   ;==>_SyncButtonCancelClick
 
 Func _UpdateParameters()
@@ -567,7 +575,8 @@ EndFunc   ;==>LoadSettings
 
 Func _UpdateArma3SyncButtonClick()
 	GUICtrlSetState($SyncButton, $GUI_DISABLE)
-	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+	GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
 
@@ -582,8 +591,9 @@ Func _UpdateArma3SyncButtonClick()
 	While 1
 		Local $sLine = StdoutRead($iPID)
 		If @error Then
-			GUICtrlSetState($SyncButton, $GUI_ENABLE)
-			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+			GUICtrlSetState($SyncButton, $GUI_SHOW)
+			GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+			GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 			GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
 			GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 			ExitLoop
@@ -625,8 +635,9 @@ Func _UpdateArma3SyncButtonClick()
 	WEnd
 
 
-	GUICtrlSetState($SyncButton, $GUI_ENABLE)
-	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+	GUICtrlSetState($SyncButton, $GUI_SHOW)
+	GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 EndFunc   ;==>_UpdateArma3SyncButtonClick
@@ -650,7 +661,8 @@ Func _CheckArma3SyncRepoClick()
 	While 1
 		Local $sLine = StdoutRead($iPID)
 		If @error Then
-			GUICtrlSetState($SyncButton, $GUI_ENABLE)
+			GUICtrlSetState($SyncButton, $GUI_SHOW)
+
 			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
 			GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
 			GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
@@ -669,8 +681,9 @@ Func _CheckArma3SyncRepoClick()
 	WEnd
 
 
-	GUICtrlSetState($SyncButton, $GUI_ENABLE)
-	GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
+	GUICtrlSetState($SyncButton, $GUI_SHOW)
+	GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 EndFunc   ;==>_CheckArma3SyncRepoClick
