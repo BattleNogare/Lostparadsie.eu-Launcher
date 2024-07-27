@@ -574,6 +574,8 @@ Func _UpdateArma3SyncButtonClick()
 	Local $sCommand2 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -UPDATE' ; Arma3Sync Update-CMD-Befehl
 	;MsgBox(0,"SyncUpdate", $sCommand2)
 	$iPID = Run($sCommand2, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	GUICtrlSetState($hTab1, $GUI_SHOW)
+	GUICtrlSetState($hTab2, $GUI_HIDE)
 	Local $sOutput = "Arma3Sync Update gestartet..." & @CRLF
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
@@ -638,8 +640,10 @@ Func _CheckArma3SyncRepoClick()
 	Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 
 	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK "' & $repositoryname & '"'; Arma3Sync CHECK-CMD-Befehl
-	MsgBox(0,"SyncCheck", $sCommand3)
+	;MsgBox(0,"SyncCheck", $sCommand3)
 	$iPID = Run($sCommand3, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	GUICtrlSetState($hTab1, $GUI_SHOW)
+	GUICtrlSetState($hTab2, $GUI_HIDE)
 	Local $sOutput = "Arma3Sync Check gestartet..." & @CRLF & "Dies kann einen Moment dauern..." & @CRLF
 	GUICtrlSetFont($Output, 9, 400, 0, "")
 
@@ -654,36 +658,12 @@ Func _CheckArma3SyncRepoClick()
 		EndIf
 
 		If $sLine <> "" Then
-
-			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
-			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
-				; Zeige alle Zeilen an
-				$sOutput &= $sLine
-			Else
-				; Überprüfen, ob die Zeile das Schlüsselwort enthält
-				If StringInStr($sLine, "ArmA3Sync Installed version =") Then
-					$sLine = StringReplace($sLine, "ArmA3Sync Installed version =", "Installierte ArmA3Sync Version =")
-					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "ArmA3Sync Available update version =") Then
-					$sLine = StringReplace($sLine, "ArmA3Sync Available update version =", @CRLF & "Verfügbare Online-ArmA3Sync Version =")
-					$sOutput &= $sLine
-				EndIf
-				If StringInStr($sLine, "No new update available.") Then
-					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von ArmA3Sync gefunden")
-					$sOutput &= $sLine
-				EndIf
-
-
-			EndIf
-
-			; Ersetzen der spezifischen Zeichenkette
-
-
-			; Ausgabe der geänderten Zeile
-			GUICtrlSetData($Output, $sOutput)
-			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
+			$sOutput &= $sLine
 		EndIf
+
+		GUICtrlSetData($Output, $sOutput)
+		_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
+
 
 		;Sleep(10) ; CPU entlasten
 	WEnd
