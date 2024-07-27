@@ -431,7 +431,7 @@ Func _SyncButtonClick()
 				$sOutput &= $sLine
 			Else
 				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
-				If StringInStr($sLine, "Synchronising with repository") Or StringInStr($sLine, "Number of files to") Or StringInStr($sLine, "Download complete:") Then
+				If StringInStr($sLine, "Number of files to") Or StringInStr($sLine, "Download complete:") Then
 					$sOutput &= $sLine
 				EndIf
 			EndIf
@@ -539,6 +539,8 @@ Func _UpdateArma3SyncButtonClick()
 		EndIf
 
 		If $sLine <> "" Then
+
+			MsgBox(0,"Test","Debug Status= "& GUICtrlRead($Arma3SyncDebug))
 
 			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
 			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
