@@ -89,6 +89,10 @@ $hTab1 = GUICtrlCreateTabItem("Launcher")
 $Logo = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\LP-Logo.png", 10, 31, 280, 204)
 GUICtrlSetState(-1, $GUI_DISABLE)
 
+; Reparatur Label
+$ReparaturLabel = GUICtrlCreateLabel("Check aller Dateien gestartet..." & @CRLF & "Dies kann einen Moment dauern...", 420 ,505, 355, 30,$SS_CENTER)
+GUICtrlSetState($ReparaturLabel, $GUI_HIDE)
+
 ; Button Sync
 $SyncButton = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\syncdata.png", 494, 505, 144, 54)
 
@@ -616,7 +620,7 @@ Func _UpdateArma3SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "No new update available.") Then
-					$sLine = StringReplace($sLine, "No new update available.", @CRLF & "Keine neue Version von ArmA3Sync gefunden")
+					$sLine = StringReplace($sLine, "No new update available.","Keine neue Version von ArmA3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
 
@@ -644,10 +648,11 @@ EndFunc   ;==>_UpdateArma3SyncButtonClick
 
 
 Func _CheckArma3SyncRepoClick()
-	GUICtrlSetState($SyncButton, $GUI_DISABLE)
-	GUICtrlSetState($LPLaunchButton, $GUI_DISABLE)
+	GUICtrlSetState($SyncButton, $GUI_HIDE)
+	GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
+	GUICtrlSetState($ReparaturLabel, $GUI_SHOW)
 
 
 	Local $sCommand3 = 'java -jar "' & @WorkingDir & '\ArmA3Sync.jar" -CHECK "' & $repositoryname & '"' ; Arma3Sync CHECK-CMD-Befehl
@@ -663,8 +668,8 @@ Func _CheckArma3SyncRepoClick()
 		If @error Then
 			GUICtrlSetState($SyncButton, $GUI_SHOW)
 
-			GUICtrlSetState($LPLaunchButton, $GUI_ENABLE)
-			GUICtrlSetState($Arma3SyncUpdate, $GUI_ENABLE)
+			GUICtrlSetState($LPLaunchButton, $GUI_SHOW)
+			GUICtrlSetState($Arma3SyncUpdate, $GUI_SHOW)
 			GUICtrlSetState($Arma3SyncCheck, $GUI_ENABLE)
 			ExitLoop
 		EndIf
@@ -679,6 +684,8 @@ Func _CheckArma3SyncRepoClick()
 
 		Sleep(50) ; CPU entlasten
 	WEnd
+
+	GUICtrlSetState($ReparaturLabel, $GUI_HIDE)
 
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
