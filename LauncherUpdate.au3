@@ -108,7 +108,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 	Local $repositoryuserpassword = IniRead($sTempIni, "Repository", "userpassword", $IniDefaultwert)
 	Local $repositoryurl = IniRead($sTempIni, "Repository", "repositoryurl", $IniDefaultwert)
 
-	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten1")
+	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten")
 	GUICtrlSetData($progressbar, 40)
 
 	; Pfad zur Console.Bat
@@ -125,8 +125,6 @@ $IniDefaultwert = "Wert nicht gefunden"
 	; CMD - Hide, erstelle das Fenster
 	Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
 
-	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten2")
-	GUICtrlSetData($progressbar, 40)
 
 	Sleep(1000)
 	; Lese bestehendes Repo
@@ -138,11 +136,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 			ExitLoop
 		EndIf
 	WEnd
-	;MsgBox(0,"Test",$sOutput)
-	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten3")
-	GUICtrlSetData($progressbar, 40)
-
-
+	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & $sOutput)
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
 		GUICtrlSetData($progresstext, "Erstelle Repository")
 		GUICtrlSetData($progressbar, 40)
