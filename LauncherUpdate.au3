@@ -133,7 +133,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 		$sOutput &= StdoutRead($iPID)
 		If @error Then ExitLoop
 	WEnd
-	;MsgBox(0, "LIST", $sOutput)
+	MsgBox(0, "LIST", $sOutput)
 
 
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
@@ -141,6 +141,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 		GUICtrlSetData($progressbar, 40)
 		; Eingabe Repo
 		StdinWrite($iPID, "NEW" & @CRLF)
+		MsgBox(0, "Test", $sOutput)
 		Sleep(100)
 		StdinWrite($iPID, $repositoryname & @CRLF)
 		Sleep(100)
