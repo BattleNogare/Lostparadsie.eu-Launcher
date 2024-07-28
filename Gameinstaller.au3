@@ -254,13 +254,23 @@ While 1
 
 			; Download Downloader
 			GUICtrlSetData($progresstext, "Download Downloader")
-			GUICtrlSetData($progressbar, 88)
+			GUICtrlSetData($progressbar, 82)
 			WriteLog("Starte Download-Downloader" & @CRLF)
 			$downDownloaderURL = IniRead($sTempIni, "Downloads", "downDownloader", $IniDefaultwert)
 			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\download.exe"
 			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
 			InetClose($downDownload)
 			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
+
+			; Download CheckVersion
+			GUICtrlSetData($progresstext, "Download CheckVersion")
+			GUICtrlSetData($progressbar, 89)
+			WriteLog("Starte Download CheckVersion" & @CRLF)
+			$downDownloaderURL = IniRead($sTempIni, "Downloads", "CheckVersion", $IniDefaultwert)
+			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\CheckVersion.exe"
+			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
+			InetClose($downDownload)
+			WriteLog("Download CheckVersion abgeschlossen" & @CRLF)
 
 			; Download .ico
 			$LPicoURL = IniRead($sTempIni, "Downloads", "LPicon.ico", $IniDefaultwert)
