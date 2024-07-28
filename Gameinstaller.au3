@@ -27,8 +27,7 @@ Global $DefaultInstallPath = "C:\Program Files (x86)\Lostparadise Laucher\"
 
 #Region ### START Koda GUI section ### Form=
 $Form1_1 = GUICreate("Lostparadise.eu Installer", 520, 320, 640, 265)
-GUICtrlSetDefColor(0xcdd8e0)
-GUICtrlSetDefBkColor(0x252729)
+
 $Install = GUICtrlCreateButton("Installieren", 408, 272, 91, 25)
 $Speicherort = GUICtrlCreateLabel("Wo soll der Launcher installiert werden?", 16, 104, 202, 17)
 $SpeicherInput = GUICtrlCreateInput("", 16, 128, 377, 21)
