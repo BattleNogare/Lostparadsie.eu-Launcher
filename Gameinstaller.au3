@@ -23,6 +23,8 @@
 
 #RequireAdmin
 
+#AutoIt3Wrapper_icon=LPicon.ico
+
 Global $DefaultArma3Path = "C:\Program Files (x86)\Steam\steamapps\common\Arma 3\arma3battleye.exe"
 Global $DefaultInstallPath = "C:\Program Files (x86)\Lostparadise Laucher\"
 
