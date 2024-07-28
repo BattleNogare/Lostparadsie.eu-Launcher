@@ -21,7 +21,7 @@
 Local $sLogFilePath = @WorkingDir & "\LP-Data\Launcher-Log.txt"
 Local $hLogFile = FileOpen($sLogFilePath, 9)
 Local $sTimeStamp = @YEAR & "-" & @MON & "-" & @MDAY & " " & @HOUR & ":" & @MIN & ":" & @SEC & ":" & @MSEC
-FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate wird ausgeführt")
+FileWrite($hLogFile, $sTimeStamp & " - " & "LauncherUpdate wird ausgeführt")
 
 ; URL INI-Datei
 Local $sUrl = "https://raw.githubusercontent.com/BattleNogare/Lostparadsie.eu-Launcher/main/config.ini"

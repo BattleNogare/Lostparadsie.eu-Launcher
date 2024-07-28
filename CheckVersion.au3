@@ -20,7 +20,7 @@
 Local $sLogFilePath = @WorkingDir & "\LP-Data\Launcher-Log.txt"
 Local $hLogFile = FileOpen($sLogFilePath, 9)
 Local $sTimeStamp = @YEAR & "-" & @MON & "-" & @MDAY & " " & @HOUR & ":" & @MIN & ":" & @SEC & ":" & @MSEC
-FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "CheckVersion wurde ausgeführt")
+FileWrite($hLogFile, $sTimeStamp & " - " & "CheckVersion wurde ausgeführt")
 
 ; URL INI-Datei
 Local $sUrl = "https://raw.githubusercontent.com/BattleNogare/Lostparadsie.eu-Launcher/main/config.ini"
@@ -67,7 +67,7 @@ If $OnlineVersion <> $ClientVersion Then
 	Run( @WorkingDir & "\LauncherUpdate.exe")
 
 Else
-	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Launcher")
+	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Launcher" & @CRLF )
 	Run( @WorkingDir & "\LP_Launcher.exe")
 EndIf
 
