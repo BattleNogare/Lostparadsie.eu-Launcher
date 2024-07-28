@@ -63,7 +63,7 @@ If $OnlineVersion <> $ClientVersion Then
 	Local $downDownload = InetGet($LauncherUpdateURL, $LauncherUpdatePath, 1, $INET_DOWNLOADWAIT)
 	InetClose($downDownload)
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate neu heruntergeladen")
-	MsgBox(0,"Test",$LauncherUpdatePath)
+	;MsgBox(0,"Test",$LauncherUpdatePath)
 	Run( @WorkingDir & "\LauncherUpdate.exe")
 
 Else

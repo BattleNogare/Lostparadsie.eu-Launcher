@@ -136,6 +136,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 		$sOutput &= StdoutRead($iPID)
 		If @error Then ExitLoop
 	WEnd
+	MsgBox(0,"Test",$sOutput)
 	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten3")
 	GUICtrlSetData($progressbar, 40)
 
