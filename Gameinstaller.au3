@@ -286,7 +286,7 @@ While 1
 			GUICtrlSetData($progresstext, "Erstelle Desktop-Lostparadise-Verknüpfung")
 			GUICtrlSetData($progressbar, 99)
 			Local $iconPath = $sDirectory & "\LP-Data\LPicon.ico"
-			Local $LostparadiseexePath = $sDirectory & "\LauncherUpdate.exe"
+			Local $LostparadiseexePath = $sDirectory & "\CheckVersion.exe"
 			FileWrite($LostparadiseexePath,"dummy")
 			FileCreateShortcut($LostparadiseexePath, @DesktopDir & "\Lostparadise.lnk", $sDirectory, "", "Lostparadise Launcher", $iconPath)
 			WriteLog("Desktopverknüpfung erstellt" & @CRLF)
