@@ -108,7 +108,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 	Local $repositoryuserpassword = IniRead($sTempIni, "Repository", "userpassword", $IniDefaultwert)
 	Local $repositoryurl = IniRead($sTempIni, "Repository", "repositoryurl", $IniDefaultwert)
 
-	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten")
+	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten1")
 	GUICtrlSetData($progressbar, 40)
 
 	; Pfad zur Console.Bat
@@ -134,9 +134,11 @@ $IniDefaultwert = "Wert nicht gefunden"
 	Local $sOutput = ""
 	While 1
 		$sOutput &= StdoutRead($iPID)
-		If @error Then ExitLoop
+		If StringInStr($sOutput, "Please enter a command =") Then
+			ExitLoop
+		EndIf
 	WEnd
-	MsgBox(0,"Test",$sOutput)
+	;MsgBox(0,"Test",$sOutput)
 	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten3")
 	GUICtrlSetData($progressbar, 40)
 
