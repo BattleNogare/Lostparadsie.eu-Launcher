@@ -125,6 +125,9 @@ $IniDefaultwert = "Wert nicht gefunden"
 	; CMD - Hide, erstelle das Fenster
 	Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
 
+	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten2")
+	GUICtrlSetData($progressbar, 40)
+
 	Sleep(1000)
 	; Lese bestehendes Repo
 	StdinWrite($iPID, "LIST" & @CRLF)
@@ -133,7 +136,8 @@ $IniDefaultwert = "Wert nicht gefunden"
 		$sOutput &= StdoutRead($iPID)
 		If @error Then ExitLoop
 	WEnd
-	MsgBox(0, "LIST", $sOutput)
+	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten3")
+	GUICtrlSetData($progressbar, 40)
 
 
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
@@ -141,7 +145,8 @@ $IniDefaultwert = "Wert nicht gefunden"
 		GUICtrlSetData($progressbar, 40)
 		; Eingabe Repo
 		StdinWrite($iPID, "NEW" & @CRLF)
-		MsgBox(0, "Test", $sOutput)
+		GUICtrlSetData($progresstext, "Erstelle neu")
+		GUICtrlSetData($progressbar, 40)
 		Sleep(100)
 		StdinWrite($iPID, $repositoryname & @CRLF)
 		Sleep(100)
