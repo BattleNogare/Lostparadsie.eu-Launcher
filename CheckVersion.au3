@@ -58,11 +58,12 @@ If $OnlineVersion <> $ClientVersion Then
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate gelöscht")
 	EndIf
 
-	$downDownloaderURL = IniRead($sTempIni, "Downloads", "LauncherUpdate", $IniDefaultwert)
-	$downDownloaderpath = @WorkingDir & "\LauncherUpdate.exe"
-	Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
+	$LauncherUpdateURL = IniRead($sTempIni, "Downloads", "LauncherUpdate", $IniDefaultwert)
+	$LauncherUpdatePath = @WorkingDir & "\LauncherUpdate.exe"
+	Local $downDownload = InetGet($LauncherUpdateURL, $LauncherUpdatePath, 1, $INET_DOWNLOADWAIT)
 	InetClose($downDownload)
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate neu heruntergeladen")
+	MsgBox(0,"Test",$LauncherUpdatePath)
 	Run( @WorkingDir & "\LauncherUpdate.exe")
 
 Else
