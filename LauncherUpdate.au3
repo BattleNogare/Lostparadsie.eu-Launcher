@@ -128,6 +128,10 @@ If $OnlineVersion <> $ClientVersion Then
 
 	; CMD - Hide, erstelle das Fenster
 	Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
+	If @error Then
+		MsgBox(16, "Error", "Failed to run command: " & @error)
+		MsgBox(16, "Error", $iPID)
+	EndIf
 
 	Sleep(1000)
 	; Lese bestehendes Repo
@@ -137,6 +141,8 @@ If $OnlineVersion <> $ClientVersion Then
 		$sOutput &= StdoutRead($iPID)
 		If @error Then ExitLoop
 	WEnd
+	MsgBox(0, "LIST", $sOutput)
+
 
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
 		GUICtrlSetData($progresstext, "Erstelle Repository")
