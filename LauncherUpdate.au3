@@ -136,7 +136,10 @@ $IniDefaultwert = "Wert nicht gefunden"
 			ExitLoop
 		EndIf
 	WEnd
+
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & $sOutput)
+
+	Exit
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
 		GUICtrlSetData($progresstext, "Erstelle Repository")
 		GUICtrlSetData($progressbar, 40)
