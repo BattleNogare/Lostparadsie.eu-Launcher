@@ -7,8 +7,6 @@
 
 #ce ----------------------------------------------------------------------------
 
-#RequireAdmin
-
 #include <ButtonConstants.au3>
 #include <EditConstants.au3>
 #include <GUIConstantsEx.au3>
@@ -29,6 +27,8 @@ Global $DefaultInstallPath = "C:\Program Files (x86)\Lostparadise Laucher\"
 
 #Region ### START Koda GUI section ### Form=
 $Form1_1 = GUICreate("Lostparadise.eu Installer", 520, 320, 640, 265)
+GUICtrlSetDefColor(0xcdd8e0)
+GUICtrlSetDefBkColor(0x252729)
 $Install = GUICtrlCreateButton("Installieren", 408, 272, 91, 25)
 $Speicherort = GUICtrlCreateLabel("Wo soll der Launcher installiert werden?", 16, 104, 202, 17)
 $SpeicherInput = GUICtrlCreateInput("", 16, 128, 377, 21)
@@ -138,11 +138,14 @@ While 1
 			EndIf
 
 			; Erstellung SpeicherOrdner
+			GUICtrlSetData($progresstext, "Erstellung Speicherort")
+			GUICtrlSetData($progressbar, 13)
 			DirCreate(GUICtrlRead($SpeicherInput))
+
 
 			; Log erstellen
 			GUICtrlSetData($progresstext, "Erstelle Log")
-			GUICtrlSetData($progressbar, 7)
+			GUICtrlSetData($progressbar, 26)
 			Local $sLogFilePath = GUICtrlRead($SpeicherInput) & "Launcher-Log.txt"
 			;MsgBox("info","install_log", $sLogFilePath)
 
@@ -157,6 +160,9 @@ While 1
 			FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Installer wurde ausgeführt" & @CRLF)
 			FileWrite($hLogFile, $javaver)
 			WriteLog("Launcher Speicherort: " & GUICtrlRead($SpeicherInput) & @CRLF)
+
+			GUICtrlSetData($progresstext, "Laden der Konfiguration")
+			GUICtrlSetData($progressbar, 39)
 
 			; INI-Datei aus Internet laden
 			Local $sURL = "https://raw.githubusercontent.com/BattleNogare/Lostparadsie.eu-Launcher/main/config.ini"
@@ -173,7 +179,7 @@ While 1
 
 			; Download Arma3Sync.zip
 			GUICtrlSetData($progresstext, "Download Sync")
-			GUICtrlSetData($progressbar, 14)
+			GUICtrlSetData($progressbar, 52)
 			WriteLog("Arma3Sync.zip download gestartet" & @CRLF)
 			$Arma3SyncFileURL = IniRead($sTempIni, "Downloads", "Arma3Sync", $IniDefaultwert)
 			$Arma3Syncmove = GUICtrlRead($SpeicherInput)
@@ -186,7 +192,7 @@ While 1
 
 			; Unzip + Rename + Move Ordner
 			GUICtrlSetData($progresstext, "Endpacke Sync")
-			GUICtrlSetData($progressbar, 21)
+			GUICtrlSetData($progressbar, 65)
 			$pscommand = 'Expand-Archive -Path ''C:\Arma3Sync.zip'' -DestinationPath ''C:\Arma3Sync9a9VuaZP\'''
 			Local $powerShellCommand = $pscommand
 			Local $psScriptFile = "C:\ExpandArchive.ps1"
@@ -199,6 +205,9 @@ While 1
 			;WriteLog("Powershell-Datei gelöscht" & @CRLF)
 			FileDelete($Arma3SyncZipPath)
 			WriteLog("Arma3Sync.zip-Datei entpackt" & @CRLF)
+
+			GUICtrlSetData($progresstext, "Anpassung ArmA3Sync")
+			GUICtrlSetData($progressbar, 78)
 
 
 			; Pfad zum Ursprungsordner
@@ -242,74 +251,15 @@ While 1
 
 			Local $sDirectory = GUICtrlRead($SpeicherInput) & 'Arma3Sync'
 
-#cs
-			; INI-Daten lesen
-			Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
-			Local $repositoryprotocol = IniRead($sTempIni, "Repository", "repositoryprotocol", $IniDefaultwert)
-			Local $repositoryport = IniRead($sTempIni, "Repository", "repositoryport", $IniDefaultwert)
-			Local $repositoryuserlogin = IniRead($sTempIni, "Repository", "userlogin", $IniDefaultwert)
-			Local $repositoryuserpassword = IniRead($sTempIni, "Repository", "userpassword", $IniDefaultwert)
-			Local $repositoryurl = IniRead($sTempIni, "Repository", "repositoryurl", $IniDefaultwert)
-
-			; Pfad zur Console.Bat
-			GUICtrlSetData($progresstext, "Erstelle Repository")
-			GUICtrlSetData($progressbar, 35)
-			Local $sBatchFilePath = GUICtrlRead($SpeicherInput) & '\Arma3Sync\ArmA3Sync-console.bat'
-			Local $sDirectory = GUICtrlRead($SpeicherInput) & 'Arma3Sync'
-
-			; CMD - Hide, erstelle das Fenster
-			Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
-
-			Sleep(1000)
-
-			; Eingabe Repo
-			StdinWrite($iPID, "NEW" & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryname & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryprotocol & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryport & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryuserlogin & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryuserpassword & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, $repositoryurl & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, "QUIT" & @CRLF)
-			Sleep(100)
-			StdinWrite($iPID, " ")
-
-			WriteLog($repositoryname & " - Repo eingegeben" & @CRLF)
-
-			; Exit
-			StdinWrite($iPID, "exit" & @CRLF)
-
-			; Kill CMD
-			If ProcessExists($iPID) Then
-				ProcessClose($iPID)
-				Sleep(1000)
-			EndIf
-#ce
-
 			; Download Downloader
+			GUICtrlSetData($progresstext, "Download Downloader")
+			GUICtrlSetData($progressbar, 88)
 			WriteLog("Starte Download-Downloader" & @CRLF)
 			$downDownloaderURL = IniRead($sTempIni, "Downloads", "downDownloader", $IniDefaultwert)
 			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\download.exe"
 			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
 			InetClose($downDownload)
 			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
-
-			; Download LauncherUpdate
-			WriteLog("Starte Download LauncherUpdate" & @CRLF)
-			$downDownloaderURL = IniRead($sTempIni, "Downloads", "LauncherUpdate", $IniDefaultwert)
-			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\LauncherUpdate.exe"
-			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
-			InetClose($downDownload)
-			WriteLog("Download LauncherUpdate abgeschlossen" & @CRLF)
 
 			; Download .ico
 			;MsgBox(0,"test", $downDownloaderURL & " - " & $downDownloaderpath)
@@ -324,9 +274,10 @@ While 1
 
 			; Erstelle Desktop-Verknüpfung
 			GUICtrlSetData($progresstext, "Erstelle Desktop-Lostparadise-Verknüpfung")
-			GUICtrlSetData($progressbar, 98)
+			GUICtrlSetData($progressbar, 99)
 			Local $iconPath = $sDirectory & "\LP-Data\LPicon.ico"
 			Local $LostparadiseexePath = $sDirectory & "\LauncherUpdate.exe"
+			FileWrite($LostparadiseexePath,"dummy")
 			FileCreateShortcut($LostparadiseexePath, @DesktopDir & "\Lostparadise.lnk", $sDirectory, "", "Lostparadise Launcher", $iconPath)
 			WriteLog("Desktopverknüpfung erstellt" & @CRLF)
 
