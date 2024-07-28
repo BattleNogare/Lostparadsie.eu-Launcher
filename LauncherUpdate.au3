@@ -64,6 +64,9 @@ If $OnlineVersion <> $ClientVersion Then
 	GUICtrlSetFont($progresstext, 10, 400)
 	GUISetState(@SW_SHOW, $updatefenster)
 
+	GUICtrlSetData($progresstext, "Entferne alte Dateien")
+	GUICtrlSetData($progressbar, 10)
+
 
 	FileDelete(@WorkingDir & "\LP_Launcher.exe")
 	FileDelete(@WorkingDir & "\LP-Data\background.jpg")
@@ -77,7 +80,10 @@ If $OnlineVersion <> $ClientVersion Then
 
 	FileWrite($hLogFile, $sTimeStamp & " - " & "Vorherige Dateien gelöscht")
 
-	Local $aPID[7]
+	Local $aPID[8]
+
+	GUICtrlSetData($progresstext, "Lade neue Dateien")
+	GUICtrlSetData($progressbar, 20)
 
 	Local $sDownloadExe = @WorkingDir & "\download.exe"
 	Run('"' & $sDownloadExe & '" "LP_Launcher.exe" "LP_Launcher_dest" "' & $sTempIni & '"', @ScriptDir)
@@ -105,6 +111,9 @@ If $OnlineVersion <> $ClientVersion Then
 		EndIf
 	Next
 
+	GUICtrlSetData($progresstext, "Überprüfe Repository-Daten")
+	GUICtrlSetData($progressbar, 30)
+
 	; INI-Daten lesen
 	Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 	Local $repositoryprotocol = IniRead($sTempIni, "Repository", "repositoryprotocol", $IniDefaultwert)
@@ -130,6 +139,8 @@ If $OnlineVersion <> $ClientVersion Then
 	WEnd
 
 	If StringInStr($sOutput, "Number of repositories found: 0") Then
+		GUICtrlSetData($progresstext, "Erstelle Repository")
+		GUICtrlSetData($progressbar, 40)
 		; Eingabe Repo
 		StdinWrite($iPID, "NEW" & @CRLF)
 		Sleep(100)
@@ -205,6 +216,8 @@ If $OnlineVersion <> $ClientVersion Then
 		If $sPassword <> $repositoryuserpassword Then $bDifferent = True
 
 		If $bDifferent Then
+			GUICtrlSetData($progresstext, "Ändere bestehendes Repository")
+			GUICtrlSetData($progressbar, 40)
 			FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Repository hat sich geändert; wird neu angelegt" & @CRLF)
 			Sleep(100)
 			StdinWrite($iPID, "DELETE" & @CRLF)
