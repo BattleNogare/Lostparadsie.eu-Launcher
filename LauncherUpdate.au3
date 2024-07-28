@@ -117,7 +117,7 @@ $IniDefaultwert = "Wert nicht gefunden"
 
 	Local $sCommand = $sBatchFilePath
 	;MsgBox(0,"LIST", $sCommand)
-	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
+	$iPID = Run($sCommand, "", @SW_SHOW, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
 
 	If @error Then
 		MsgBox(16, "Error", "Failed to run command: " & @error)
