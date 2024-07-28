@@ -254,9 +254,10 @@ GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlCreateGroup("Mod-Auswahl", 258, 253, 264, 105)
 GUICtrlSetFont(-1, 12, 400, 0, "Arial")
 GUICtrlSetColor(-1, $TextColor)
-$ModPack1 = GUICtrlCreateCheckbox("Lostparadise Arma3", 265, 277, 180, 25)
+$ModPack = GUICtrlCreateCheckbox("Lostparadise Arma3", 265, 277, 180, 25)
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetState(-1, $GUI_CHECKED)
+GUICtrlSetState(-1, $GUI_DISABLE)
 $ModPackOptional = GUICtrlCreateCheckbox("Lostparadise Optional", 265, 309, 180, 25)
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
@@ -393,7 +394,6 @@ While 1
 		Case $Arma3SyncCheck
 			_CheckArma3SyncRepoClick()
 
-
 	EndSwitch
 	Sleep(50)
 WEnd
@@ -403,9 +403,6 @@ Func _Exit()
 	Exit
 EndFunc   ;==>_Exit
 
-
-#cs
-#ce
 Func _SyncButtonClick()
 	Local $sOutput = ""
 	$sOutput = "Synchronisation gestartet..."
@@ -466,12 +463,9 @@ Func _SyncButtonClick()
 
 		If $sLine <> "" Then
 
-			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
 			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
-				; Zeige alle Zeilen an
 				$sOutput &= $sLine
 			Else
-				; Zeige nur Zeilen mit den gewünschten Schlüsselwörtern an
 				Select
 					Case StringInStr($sLine, "Number of files to update")
 						$sLine = StringReplace($sLine, "Number of files to update = ", @CRLF & "Anzahl der geänderten Dateien = ")
@@ -559,6 +553,8 @@ Func SaveSettings()
 	IniWrite($ParaIniFile, "Performance", "NoLogs", GUICtrlRead($NoLogs))
 
 	IniWrite($ParaIniFile, "Arma3exe", "ExePath", GUICtrlRead($ExecutablePath))
+	IniWrite($ParaIniFile, "Modpack", "Optional", GUICtrlRead($ModPackOptional))
+
 EndFunc   ;==>SaveSettings
 
 Func LoadSettings()
@@ -575,6 +571,7 @@ Func LoadSettings()
 	GUICtrlSetState($NoLogs, IniRead($ParaIniFile, "Performance", "NoLogs", $GUI_UNCHECKED))
 
 	GUICtrlSetData($ExecutablePath, IniRead($ParaIniFile, "Arma3exe", "ExePath", ""))
+	GUICtrlSetData($ModPackOptional, IniRead($ParaIniFile, "Modpack", "Optional", $GUI_UNCHECKED))
 EndFunc   ;==>LoadSettings
 
 Func _UpdateArma3SyncButtonClick()
@@ -605,12 +602,10 @@ Func _UpdateArma3SyncButtonClick()
 
 		If $sLine <> "" Then
 
-			; Überprüfen, ob die Checkbox "$Arma3SyncDebug" gecheckt ist
 			If GUICtrlRead($Arma3SyncDebug) = $GUI_CHECKED Then
-				; Zeige alle Zeilen an
 				$sOutput &= $sLine
 			Else
-				; Überprüfen, ob die Zeile das Schlüsselwort enthält
+
 				If StringInStr($sLine, "ArmA3Sync Installed version =") Then
 					$sLine = StringReplace($sLine, "ArmA3Sync Installed version =", "Installierte ArmA3Sync Version =")
 					$sOutput &= $sLine
@@ -623,14 +618,8 @@ Func _UpdateArma3SyncButtonClick()
 					$sLine = StringReplace($sLine, "No new update available.","Keine neue Version von ArmA3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
-
-
 			EndIf
 
-			; Ersetzen der spezifischen Zeichenkette
-
-
-			; Ausgabe der geänderten Zeile
 			GUICtrlSetData($Output, $sOutput)
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
@@ -650,6 +639,7 @@ EndFunc   ;==>_UpdateArma3SyncButtonClick
 Func _CheckArma3SyncRepoClick()
 	GUICtrlSetState($SyncButton, $GUI_HIDE)
 	GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+	GUICtrlSetState($LPLaunchButtonDisabled, $GUI_HIDE)
 	GUICtrlSetState($Arma3SyncUpdate, $GUI_DISABLE)
 	GUICtrlSetState($Arma3SyncCheck, $GUI_DISABLE)
 	GUICtrlSetState($ReparaturLabel, $GUI_SHOW)

@@ -240,6 +240,9 @@ While 1
 			Sleep(300)
 			DirRemove("C:\Arma3Sync9a9VuaZP", 1)
 
+			Local $sDirectory = GUICtrlRead($SpeicherInput) & 'Arma3Sync'
+
+#cs
 			; INI-Daten lesen
 			Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 			Local $repositoryprotocol = IniRead($sTempIni, "Repository", "repositoryprotocol", $IniDefaultwert)
@@ -254,7 +257,7 @@ While 1
 			Local $sBatchFilePath = GUICtrlRead($SpeicherInput) & '\Arma3Sync\ArmA3Sync-console.bat'
 			Local $sDirectory = GUICtrlRead($SpeicherInput) & 'Arma3Sync'
 
-			; CMD- Hide, erstelle das Fenster
+			; CMD - Hide, erstelle das Fenster
 			Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
 
 			Sleep(1000)
@@ -290,7 +293,7 @@ While 1
 				ProcessClose($iPID)
 				Sleep(1000)
 			EndIf
-
+#ce
 
 			; Download Downloader
 			WriteLog("Starte Download-Downloader" & @CRLF)
