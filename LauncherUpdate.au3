@@ -114,17 +114,16 @@ $IniDefaultwert = "Wert nicht gefunden"
 	; Pfad zur Console.Bat
 	Local $sBatchFilePath = @WorkingDir & '\ArmA3Sync-console.bat'
 	Local $sDirectory = @WorkingDir
-
+#cs
 	Local $sCommand = $sBatchFilePath
-	;MsgBox(0,"LIST", $sCommand)
-	$iPID = Run($sCommand, "", @SW_SHOW, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
+	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
 
 	If @error Then
 		MsgBox(16, "Error", "Failed to run command: " & @error)
 	EndIf
-
+#ce
 	; CMD - Hide, erstelle das Fenster
-	;Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
+	Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
 
 	Sleep(1000)
 	; Lese bestehendes Repo
