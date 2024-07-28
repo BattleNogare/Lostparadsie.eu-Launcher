@@ -21,6 +21,8 @@
 #include <ProgressConstants.au3>
 #include <File.au3>
 
+#RequireAdmin
+
 Global $DefaultArma3Path = "C:\Program Files (x86)\Steam\steamapps\common\Arma 3\arma3battleye.exe"
 Global $DefaultInstallPath = "C:\Program Files (x86)\Lostparadise Laucher\"
 
