@@ -126,12 +126,16 @@ If $OnlineVersion <> $ClientVersion Then
 	Local $sBatchFilePath = @WorkingDir & '\ArmA3Sync-console.bat'
 	Local $sDirectory = @WorkingDir
 
-	; CMD - Hide, erstelle das Fenster
-	Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
+	Local $sCommand = $sBatchFilePath
+	MsgBox(0,"LIST", $sCommand)
+	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
+
 	If @error Then
 		MsgBox(16, "Error", "Failed to run command: " & @error)
-		MsgBox(16, "Error", $iPID)
 	EndIf
+
+	; CMD - Hide, erstelle das Fenster
+	;Local $iPID = Run(@ComSpec & " /k cd /d " & '"' & $sDirectory & '"' & " && " & '"' & $sBatchFilePath & '"', "", @SW_HIDE, $STDIN_CHILD + $STDOUT_CHILD + $STDERR_CHILD)
 
 	Sleep(1000)
 	; Lese bestehendes Repo
