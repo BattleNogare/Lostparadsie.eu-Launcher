@@ -131,7 +131,6 @@ While 1
 			Local $SpeicherInput2 = GUICtrlRead($SpeicherInput)
 			If StringStripWS($SpeicherInput2, 8) = "" Then
 				GUICtrlSetData($SpeicherInput, $DefaultInstallPath)
-				;MsgBox("info","Speicherinput", GUICtrlRead($SpeicherInput))
 				;MsgBox(64, "Info", "Das Input-Feld war leer und wurde mit dem Pfad ausgefüllt: " & GUICtrlRead($SpeicherInput))
 			Else
 				;MsgBox(64, "Info", "Das Input-Feld ist nicht leer: " & $SpeicherInput2)
@@ -240,7 +239,6 @@ While 1
 					Exit
 				EndIf
 
-				;MsgBox(0,"test",$sOriginalPath & $sOriginalFolderName & " -> "& $sFinalPath)
 				WriteLog("Erfolg: " & "Ordner erfolgreich umbenannt und verschoben." & @CRLF)
 
 			Else
@@ -262,7 +260,6 @@ While 1
 			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
 
 			; Download .ico
-			;MsgBox(0,"test", $downDownloaderURL & " - " & $downDownloaderpath)
 			$LPicoURL = IniRead($sTempIni, "Downloads", "LPicon.ico", $IniDefaultwert)
 			$LPicopath = IniRead($sTempIni, "Downloads", "LPicon_dest", $IniDefaultwert)
 			$LPDatapath = GUICtrlRead($SpeicherInput) & "Arma3Sync\LP-Data"
@@ -297,8 +294,7 @@ While 1
 			Local $End = MsgBox(4, "[Lostparadise.eu]", "Installation abgeschlossen" & @CRLF & "Soll die Anwendung nun gestartet werden?")
 
 			If $End = 6 Then
-				Run($LostparadiseexePath, $sDirectory)
-				;MsgBox(0, "End", @DesktopDir & "\Lostparadise.lnk" & " wird gestartet!")
+				Run($sDirectory & "\CheckVersion.exe", $sDirectory)
 			EndIf
 
 			ExitLoop
