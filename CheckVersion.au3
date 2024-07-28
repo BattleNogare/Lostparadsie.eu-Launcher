@@ -64,5 +64,9 @@ If $OnlineVersion <> $ClientVersion Then
 	InetClose($downDownload)
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate neu heruntergeladen")
 	Run( @WorkingDir & "\LauncherUpdate.exe")
+
+Else
+	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Launcher")
+	Run( @WorkingDir & "\LP_Launcher.exe")
 EndIf
 

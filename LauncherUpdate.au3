@@ -21,7 +21,7 @@
 Local $sLogFilePath = @WorkingDir & "\LP-Data\Launcher-Log.txt"
 Local $hLogFile = FileOpen($sLogFilePath, 9)
 Local $sTimeStamp = @YEAR & "-" & @MON & "-" & @MDAY & " " & @HOUR & ":" & @MIN & ":" & @SEC & ":" & @MSEC
-FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Launcher wurde ausgeführt")
+FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "LauncherUpdate wird ausgeführt")
 
 ; URL INI-Datei
 Local $sUrl = "https://raw.githubusercontent.com/BattleNogare/Lostparadsie.eu-Launcher/main/config.ini"
@@ -39,21 +39,7 @@ EndIf
 FileWrite($sTempIni, $sData)
 
 $IniDefaultwert = "Wert nicht gefunden"
-; INI-Daten lesen
-Local $OnlineVersion = IniRead($sTempIni, "Version", "version", $IniDefaultwert)
-FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Online Version: " & $OnlineVersion)
 
-; Lese Client Version
-Local $ClientVersionFile = @WorkingDir & "\LP-Data\version.txt"
-Local $ClientVersion = "0"
-If FileExists($ClientVersionFile) Then
-	FileOpen($ClientVersionFile, 10)
-	$ClientVersion = FileRead($ClientVersionFile)
-EndIf
-FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Client Version: " & $ClientVersion)
-
-; Vergleiche Versionen
-If $OnlineVersion <> $ClientVersion Then
 	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind nicht gleich; Starte Update" & @CRLF)
 	Local $updatefenster = GUICreate("Bitte warten...", 300, 100, -1, -1, BitOR($WS_CAPTION, $WS_POPUP, $WS_SYSMENU))
 	Local $label = GUICtrlCreateLabel("Bitte warten, bis die Aktualisierung abgeschlossen ist.", 10, 10, 280, 20, $SS_CENTER)
@@ -111,7 +97,7 @@ If $OnlineVersion <> $ClientVersion Then
 		EndIf
 	Next
 
-	GUICtrlSetData($progresstext, "Überprüfe Repository-Daten")
+	GUICtrlSetData($progresstext, "Einlesen Online Repository-Daten")
 	GUICtrlSetData($progressbar, 30)
 
 	; INI-Daten lesen
@@ -122,12 +108,15 @@ If $OnlineVersion <> $ClientVersion Then
 	Local $repositoryuserpassword = IniRead($sTempIni, "Repository", "userpassword", $IniDefaultwert)
 	Local $repositoryurl = IniRead($sTempIni, "Repository", "repositoryurl", $IniDefaultwert)
 
+	GUICtrlSetData($progresstext, "Einlesen Lokaler Repository-Daten")
+	GUICtrlSetData($progressbar, 40)
+
 	; Pfad zur Console.Bat
 	Local $sBatchFilePath = @WorkingDir & '\ArmA3Sync-console.bat'
 	Local $sDirectory = @WorkingDir
 
 	Local $sCommand = $sBatchFilePath
-	MsgBox(0,"LIST", $sCommand)
+	;MsgBox(0,"LIST", $sCommand)
 	$iPID = Run($sCommand, "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
 
 	If @error Then
@@ -269,17 +258,10 @@ If $OnlineVersion <> $ClientVersion Then
 		Sleep(1000)
 	EndIf
 
+	Local $ClientVersionFile = @WorkingDir & "\LP-Data\version.txt"
+	Local $OnlineVersion = IniRead($sTempIni, "Version", "version", $IniDefaultwert)
 	FileWrite($ClientVersionFile, $OnlineVersion)
-	FileClose($ClientVersionFile)
 	GUISetState(@SW_HIDE, $updatefenster)
 	Run(@WorkingDir & "\LP_Launcher.exe")
 	;FileDelete($sTempIni)
 
-Else
-	FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Versionen sind gleich; Starte Lostparadise Launcher" & @CRLF)
-	Run(@WorkingDir & "\LP_Launcher.exe")
-	;FileDelete($sTempIni)
-EndIf
-
-#cs
-#ce
