@@ -468,8 +468,14 @@ Func _SyncButtonClick()
 			Else
 				Select
 					Case StringInStr($sLine, "Number of files to update")
-						$sLine = StringReplace($sLine, "Number of files to update = ", @CRLF & "Anzahl der geänderten Dateien = ")
+						$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der geänderten Dateien = ")
+						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
+						$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
+						$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
+						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
+						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
 						$sOutput &= $sLine
+						#cs
 						;Case StringInStr($sLine, "Number of files to delete")
 						;	$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
 						;	$sOutput &= $sLine
@@ -482,6 +488,7 @@ Func _SyncButtonClick()
 					Case StringInStr($sLine, "Update files size")
 						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
 						$sOutput &= $sLine
+						#ce
 					Case StringInStr($sLine, "Uncompressing file:")
 					Case StringInStr($sLine, "Downloading file:")
 					Case StringInStr($sLine, "Downloading from repository")
