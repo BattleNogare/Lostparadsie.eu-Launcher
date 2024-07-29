@@ -111,7 +111,7 @@ GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
 
 
 ;CMD-Ausgabe
-$Output = GUICtrlCreateEdit("", 410, 250, 375, 240, $ES_READONLY)
+$Output = GUICtrlCreateEdit("", 410, 250, 375, 240, $ES_READONLY + $ES_AUTOHSCROLL)
 GUICtrlSetData(-1, "")
 Local $sBanner = "     __                 __   ____                           __ _                           " & @CRLF & _
 		"    / /   ____   _____ / /_ / __ \ ____ _ _____ ____ _ ____/ /(_)_____ ___     ___   __  __" & @CRLF & _
@@ -405,7 +405,7 @@ EndFunc   ;==>_Exit
 
 Func _SyncButtonClick()
 	Local $sOutput = ""
-	$sOutput = "Synchronisation gestartet..."
+	$sOutput = "Synchronisation gestartet..." & @CRLF
 	Local $iExitStatus = 0
 	Local $sExitMessage = "Sync completed successfully."
 
@@ -474,6 +474,11 @@ Func _SyncButtonClick()
 						$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
 						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
 						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
+						$sLine = StringReplace($sLine, "Downloading from repository", "Lade von Repository")
+						$sLine = StringReplace($sLine, "Downloading from repository", "Lade von Repository")
+						$sLine = StringReplace($sLine, "Checking repository", "Prüfe Repository")
+						$sLine = StringReplace($sLine, "Downloading file", "Lade Datei")
+
 						$sOutput &= $sLine
 						#cs
 						;Case StringInStr($sLine, "Number of files to delete")
@@ -488,12 +493,12 @@ Func _SyncButtonClick()
 					Case StringInStr($sLine, "Update files size")
 						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
 						$sOutput &= $sLine
-						#ce
+
 					Case StringInStr($sLine, "Uncompressing file:")
 					Case StringInStr($sLine, "Downloading file:")
 					Case StringInStr($sLine, "Downloading from repository")
 					Case StringInStr($sLine, "Checking repository:")
-
+						#ce
 				EndSelect
 
 
@@ -510,6 +515,14 @@ Func _SyncButtonClick()
 
 		;Sleep(1000) ; CPU entlasten
 	WEnd
+
+	$Text = GUICtrlRead($Output)
+	$FileOutputPath = @WorkingDir & "\output.txt"
+	$FileOutput = FileOpen($FileOutputPath, 1)
+	    FileWrite($FileOutput, $Text)
+		FileWrite($FileOutput, @CRLF & @CRLF & @CRLF)
+    FileClose($FileOutput)
+
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
