@@ -482,6 +482,11 @@ Func _SyncButtonClick()
 					Case StringInStr($sLine, "Update files size")
 						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
 						$sOutput &= $sLine
+					Case StringInStr($sLine, "Uncompressing file:")
+					Case StringInStr($sLine, "Downloading file:")
+					Case StringInStr($sLine, "Downloading from repository")
+					Case StringInStr($sLine, "Checking repository:")
+
 				EndSelect
 
 
