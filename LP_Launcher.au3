@@ -501,7 +501,7 @@ Func _SyncButtonClick()
 			_GUICtrlEdit_LineScroll($Output, 0, _GUICtrlEdit_GetLineCount($Output))
 		EndIf
 
-		Sleep(1000) ; CPU entlasten
+		;Sleep(1000) ; CPU entlasten
 	WEnd
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
