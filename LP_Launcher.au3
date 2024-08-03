@@ -471,22 +471,21 @@ Func _SyncButtonClick()
 						$sLine = StringReplace($sLine, "Number of files to update = ", "Anzahl der geänderten Dateien = ")
 						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
 						$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
-						$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen abgeschlossen: ")
 						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
-						$sLine = StringReplace($sLine, "Update files size:", "Aktualisierte Dateigröße:")
-						$sLine = StringReplace($sLine, "Downloading from repository", "Lade von Repository")
 						$sLine = StringReplace($sLine, "Downloading from repository", "Lade von Repository")
 						$sLine = StringReplace($sLine, "Checking repository", "Prüfe Repository")
 						$sLine = StringReplace($sLine, "Downloading file", "Lade Datei")
 
 						$sOutput &= $sLine
+
+					Case StringInStr($sLine, "Download complete")
+						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen: ")
+						$sOutput &= $sLine
 						#cs
 						;Case StringInStr($sLine, "Number of files to delete")
 						;	$sLine = StringReplace($sLine, "Number of files to delete", "Anzahl der gelöschten Dateien")
 						;	$sOutput &= $sLine
-					Case StringInStr($sLine, "Download complete")
-						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen abgeschlossen: ")
-						$sOutput &= $sLine
+
 					Case StringInStr($sLine, "Synchronization with repository")
 						$sLine = StringReplace($sLine, "Synchronization with repository ", "Synchronisation mit Repository ")
 						$sOutput &= $sLine
@@ -522,7 +521,7 @@ Func _SyncButtonClick()
 	    FileWrite($FileOutput, $Text)
 		FileWrite($FileOutput, @CRLF & @CRLF & @CRLF)
     FileClose($FileOutput)
-
+	$sOutput &= "Synchronization abgeschlossen" & @CRLF & "Viel Spaß"
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
