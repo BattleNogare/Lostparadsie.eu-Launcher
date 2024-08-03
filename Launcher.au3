@@ -270,7 +270,8 @@ Else
 
 	If $OnlineVersion <> $ClientVersion Then
 		 Run('"' & @ScriptFullPath & '" Update', @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD + $STDIN_CHILD)
-		 FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Lauchner Neustart")
+		 FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Launcher Neustart")
+		 FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & '"' & @ScriptFullPath & '" Update')
 		 Exit
 
 	Else
