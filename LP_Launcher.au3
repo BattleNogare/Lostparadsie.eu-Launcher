@@ -479,7 +479,7 @@ Func _SyncButtonClick()
 						$sOutput &= $sLine
 
 					Case StringInStr($sLine, "Download complete")
-						$sLine = StringReplace($sLine, "Download complete: ", @CRLF & "Herunterladen: ")
+						$sLine = StringReplace($sLine, "Download complete: ","Herunterladen: ")
 						$sOutput &= $sLine
 						#cs
 						;Case StringInStr($sLine, "Number of files to delete")
@@ -521,7 +521,7 @@ Func _SyncButtonClick()
 	    FileWrite($FileOutput, $Text)
 		FileWrite($FileOutput, @CRLF & @CRLF & @CRLF)
     FileClose($FileOutput)
-	$sOutput &= "Synchronization abgeschlossen" & @CRLF & "Viel Spaß"
+	$sOutput &= @CRLF & "Synchronization abgeschlossen" & @CRLF & "Viel Spaß"
 
 	GUICtrlSetState($SyncButton, $GUI_SHOW)
 	GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
