@@ -262,15 +262,15 @@ While 1
 			InetClose($downDownload)
 			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
 
-			; Download CheckVersion
-			GUICtrlSetData($progresstext, "Download CheckVersion")
+			; Download Launcher
+			GUICtrlSetData($progresstext, "Download Launcher")
 			GUICtrlSetData($progressbar, 89)
-			WriteLog("Starte Download CheckVersion" & @CRLF)
-			$downDownloaderURL = IniRead($sTempIni, "Downloads", "CheckVersion", $IniDefaultwert)
-			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\CheckVersion.exe"
+			WriteLog("Starte Download Launcher" & @CRLF)
+			$downDownloaderURL = IniRead($sTempIni, "Downloads", "Launcher", $IniDefaultwert)
+			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\Launcher.exe"
 			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
 			InetClose($downDownload)
-			WriteLog("Download CheckVersion abgeschlossen" & @CRLF)
+			WriteLog("Download Launcher abgeschlossen" & @CRLF)
 
 			; Download .ico
 			$LPicoURL = IniRead($sTempIni, "Downloads", "LPicon.ico", $IniDefaultwert)
@@ -310,7 +310,7 @@ While 1
 			Local $End = MsgBox(4, "[Lostparadise.eu]", "Installation abgeschlossen" & @CRLF & "Soll die Anwendung nun gestartet werden?")
 
 			If $End = 6 Then
-				Run($sDirectory & "\CheckVersion.exe", $sDirectory)
+				Run($sDirectory & "\Launcher.exe", $sDirectory)
 			EndIf
 
 			ExitLoop
