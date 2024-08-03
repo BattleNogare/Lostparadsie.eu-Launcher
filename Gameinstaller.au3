@@ -259,18 +259,26 @@ While 1
 			$downDownloaderURL = IniRead($sTempIni, "Downloads", "downDownloader", $IniDefaultwert)
 			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\download.exe"
 			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
+			If @error = 0 And FileExists($downDownloaderpath) Then
+				WriteLog("Download-Downloader erfolgreich abgeschlossen" & @CRLF)
+			Else
+				WriteLog("Fehler beim Download-Downloader" & @CRLF)
+			EndIf
 			InetClose($downDownload)
-			WriteLog("Download-Downloader abgeschlossen" & @CRLF)
 
 			; Download Launcher
 			GUICtrlSetData($progresstext, "Download Launcher")
 			GUICtrlSetData($progressbar, 89)
 			WriteLog("Starte Download Launcher" & @CRLF)
-			$downDownloaderURL = IniRead($sTempIni, "Downloads", "Launcher", $IniDefaultwert)
-			$downDownloaderpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\Launcher.exe"
-			Local $downDownload = InetGet($downDownloaderURL, $downDownloaderpath, 1, $INET_DOWNLOADWAIT)
-			InetClose($downDownload)
-			WriteLog("Download Launcher abgeschlossen" & @CRLF)
+			$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher", $IniDefaultwert)
+			$Launcherpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\Launcher.exe"
+			Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
+			If @error = 0 And FileExists($Launcherpath) Then
+				WriteLog("Download Launcher erfolgreich abgeschlossen" & @CRLF)
+			Else
+				WriteLog("Fehler beim Download Launcher" & @CRLF)
+			EndIf
+			InetClose($LaunchDownload)
 
 			; Download .ico
 			$LPicoURL = IniRead($sTempIni, "Downloads", "LPicon.ico", $IniDefaultwert)
@@ -279,15 +287,19 @@ While 1
 			DirCreate($LPDatapath)
 			WriteLog("Starte .ico Download" & @CRLF)
 			Local $icoDownload = InetGet($LPicoURL, $sDirectory & $LPicopath, 1, $INET_DOWNLOADWAIT)
+			If @error = 0 And FileExists($sDirectory & $LPicopath) Then
+				WriteLog("Download .ico erfolgreich abgeschlossen" & @CRLF)
+			Else
+				WriteLog("Fehler beim .ico Download" & @CRLF)
+			EndIf
 			InetClose($icoDownload)
-			WriteLog("Download .ico abgeschlossen" & @CRLF)
 
 			; Erstelle Desktop-Verknüpfung
 			GUICtrlSetData($progresstext, "Erstelle Desktop-Lostparadise-Verknüpfung")
 			GUICtrlSetData($progressbar, 99)
 			Local $iconPath = $sDirectory & "\LP-Data\LPicon.ico"
 			Local $LostparadiseexePath = $sDirectory & "\Launcher.exe"
-			FileWrite($LostparadiseexePath,"dummy")
+			FileWrite($LostparadiseexePath, "dummy")
 			FileCreateShortcut($LostparadiseexePath, @DesktopDir & "\Lostparadise.lnk", $sDirectory, "", "Lostparadise Launcher", $iconPath)
 			WriteLog("Desktopverknüpfung erstellt" & @CRLF)
 
