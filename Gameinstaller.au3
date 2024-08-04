@@ -262,7 +262,7 @@ While 1
 			If @error = 0 And FileExists($downDownloaderpath) Then
 				WriteLog("Download-Downloader erfolgreich abgeschlossen" & @CRLF)
 			Else
-				WriteLog("Fehler beim Download-Downloader" & @CRLF)
+				WriteLog("Fehler beim Download-Downloader: " & HandleInetError(@error) & @CRLF)
 			EndIf
 			InetClose($downDownload)
 
@@ -270,13 +270,13 @@ While 1
 			GUICtrlSetData($progresstext, "Download Launcher")
 			GUICtrlSetData($progressbar, 89)
 			WriteLog("Starte Download Launcher" & @CRLF)
-			$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher", $IniDefaultwert)
+			$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher.exe", $IniDefaultwert)
 			$Launcherpath = GUICtrlRead($SpeicherInput) & "Arma3Sync\Launcher.exe"
 			Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
 			If @error = 0 And FileExists($Launcherpath) Then
 				WriteLog("Download Launcher erfolgreich abgeschlossen" & @CRLF)
 			Else
-				WriteLog("Fehler beim Download Launcher" & @CRLF)
+				WriteLog("Fehler beim Download Launcher: " & HandleInetError(@error) & @CRLF)
 			EndIf
 			InetClose($LaunchDownload)
 
@@ -290,7 +290,7 @@ While 1
 			If @error = 0 And FileExists($sDirectory & $LPicopath) Then
 				WriteLog("Download .ico erfolgreich abgeschlossen" & @CRLF)
 			Else
-				WriteLog("Fehler beim .ico Download" & @CRLF)
+				WriteLog("Fehler beim .ico Download: " & HandleInetError(@error) & @CRLF)
 			EndIf
 			InetClose($icoDownload)
 
@@ -341,3 +341,19 @@ Func WriteLog($sMessage)
 	FileWriteLine($hFile, @YEAR & "-" & @MON & "-" & @MDAY & " " & @HOUR & ":" & @MIN & ":" & @SEC & ":" & @MSEC & " - " & $sMessage)
 	FileClose($hFile)
 EndFunc   ;==>WriteLog
+
+; Funktion zur Fehlerbehandlung
+Func HandleInetError($errorCode)
+	Switch $errorCode
+		Case 1
+			Return "Fehler: ungültiges URL-Format"
+		Case 2
+			Return "Fehler: ungültiger Dateiname oder Dateipfad"
+		Case 3
+			Return "Fehler: Download wurde abgebrochen"
+		Case 4
+			Return "Fehler: keine Netzwerkverbindung"
+		Case Else
+			Return "Unbekannter Fehler: " & $errorCode
+	EndSwitch
+EndFunc   ;==>HandleInetError
