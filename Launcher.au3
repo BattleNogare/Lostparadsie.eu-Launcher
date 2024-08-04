@@ -82,7 +82,6 @@ If $CmdLine[0] > 0 And $CmdLine[1] = "Update" Then
 	; Entfernung alter Dateien
 	GUICtrlSetData($progresstext, "Entferne alte Dateien")
 	GUICtrlSetData($progressbar, 10)
-	FileDelete(@WorkingDir & "\LP_Launcher.exe")
 	FileDelete(@WorkingDir & "\LP-Data\background.jpg")
 	FileDelete(@WorkingDir & "\LP-Data\LP-Logo.png")
 	FileDelete(@WorkingDir & "\LP-Data\syncdata.png")
@@ -101,8 +100,7 @@ If $CmdLine[0] > 0 And $CmdLine[1] = "Update" Then
 	GUICtrlSetData($progressbar, 20)
 
 	Local $sDownloadExe = @WorkingDir & "\download.exe"
-	Run('"' & $sDownloadExe & '" "LP_Launcher.exe" "LP_Launcher_dest" "' & $sTempIni & '"', @ScriptDir)
-	Sleep(100)
+
 	Run('"' & $sDownloadExe & '" "background.jpg" "background_dest" "' & $sTempIni & '"', @ScriptDir)
 	Sleep(100)
 	Run('"' & $sDownloadExe & '" "LP-Logo.png" "LP-Logo_dest" "' & $sTempIni & '"', @ScriptDir)
@@ -207,7 +205,7 @@ If $CmdLine[0] > 0 And $CmdLine[1] = "Update" Then
 		; Exit
 		StdinWrite($iPID, "exit" & @CRLF)
 
-	; Bestehendens Repo Löschen und Neues erstellen
+		; Bestehendens Repo Löschen und Neues erstellen
 	Else
 		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Ändere bestehendes Repository")
 		GUICtrlSetData($progresstext, "Ändere bestehendes Repository")
@@ -250,7 +248,7 @@ If $CmdLine[0] > 0 And $CmdLine[1] = "Update" Then
 
 	; Update Client Version
 	Local $OnlineVersion = IniRead($sTempIni, "Version", "version", $IniDefaultwert)
-	FileOpen($ClientVersionFile ,2)
+	FileOpen($ClientVersionFile, 2)
 	FileWrite($ClientVersionFile, $OnlineVersion)
 	FileClose($ClientVersionFile)
 	GUISetState(@SW_HIDE, $updatefenster)
@@ -274,12 +272,29 @@ Else
 
 
 	If $OnlineVersion <> $ClientVersion Then
-		ShellExecute(@ScriptFullPath, "Update", "", "", @SW_HIDE)
-		 FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Launcher Neustart")
-		 Exit
+
+		Run('"' & $sDownloadExe & '" "Launcher.exe" "Launcher_dest" "' & $sTempIni & '"', @ScriptDir)
+		Sleep(100)
+
+		Local $programName = @ScriptFullPath
+
+		; Erstellen eines temporären Batch-Skripts zum Löschen der Datei
+		Global $batchFile = @WorkingDir & "\LP-Data\delete_and_update.bat"
+		FileWrite($batchFile, '@echo off' & @CRLF)
+		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
+		FileWrite($batchFile, 'del "' & $programName & '"' & @CRLF)
+		FileWrite($batchFile, 'rename "' & @WorkingDir & '\Launcherneu.exe" "' & @ScriptDir & '\' & @ScriptName & '"' & @CRLF)
+		FileWrite($batchFile, 'start "" "' & @ScriptDir & '\Launcher.exe" Update' & @CRLF)
+		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
+		FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
+
+		; Batch-Skript ausführen
+		Run($batchFile, "", @SW_HIDE)
+		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Launcher Neustart")
+		Exit
 
 	Else
-			;MsgBox(0, "[Lostparadise.eu]", "Kein Update" & @CRLF & "Nun startet der Launcher")
+		;MsgBox(0, "[Lostparadise.eu]", "Kein Update" & @CRLF & "Nun startet der Launcher")
 	EndIf
 EndIf
 
@@ -312,15 +327,15 @@ $LauncherTab = GUICtrlCreateButton("Launcher", 2, 2, 60, 18)
 $OptionenTab = GUICtrlCreateButton("Optionen", 62, 2, 60, 18)
 
 $Link1 = GUICtrlCreateButton("", 380, 2, 80, 18)
-GUICtrlSetData($Link1 , IniRead($sTempIni, "Links", "Link1Name", $IniDefaultwert) )
+GUICtrlSetData($Link1, IniRead($sTempIni, "Links", "Link1Name", $IniDefaultwert))
 $Link2 = GUICtrlCreateButton("", 460, 2, 80, 18)
-GUICtrlSetData($Link2 , IniRead($sTempIni, "Links", "Link2Name", $IniDefaultwert) )
+GUICtrlSetData($Link2, IniRead($sTempIni, "Links", "Link2Name", $IniDefaultwert))
 $Link3 = GUICtrlCreateButton("", 540, 2, 80, 18)
-GUICtrlSetData($Link3 , IniRead($sTempIni, "Links", "Link3Name", $IniDefaultwert) )
+GUICtrlSetData($Link3, IniRead($sTempIni, "Links", "Link3Name", $IniDefaultwert))
 $Link4 = GUICtrlCreateButton("", 620, 2, 80, 18)
-GUICtrlSetData($Link4 , IniRead($sTempIni, "Links", "Link4Name", $IniDefaultwert) )
+GUICtrlSetData($Link4, IniRead($sTempIni, "Links", "Link4Name", $IniDefaultwert))
 $Link5 = GUICtrlCreateButton("", 700, 2, 80, 18)
-GUICtrlSetData($Link5 , IniRead($sTempIni, "Links", "Link5Name", $IniDefaultwert) )
+GUICtrlSetData($Link5, IniRead($sTempIni, "Links", "Link5Name", $IniDefaultwert))
 $ButtonExit = GUICtrlCreateButton("X", 780, 2, 18, 18)
 
 ; Exit Button
@@ -340,7 +355,7 @@ $Logo = _GUICtrlPic_Create(@WorkingDir & "\LP-Data\LP-Logo.png", 10, 31, 280, 20
 GUICtrlSetState(-1, $GUI_DISABLE)
 
 ; Reparatur Label
-$ReparaturLabel = GUICtrlCreateLabel("Check aller Dateien gestartet..." & @CRLF & "Dies kann einen Moment dauern...", 420 ,505, 355, 30,$SS_CENTER)
+$ReparaturLabel = GUICtrlCreateLabel("Check aller Dateien gestartet..." & @CRLF & "Dies kann einen Moment dauern...", 420, 505, 355, 30, $SS_CENTER)
 GUICtrlSetState($ReparaturLabel, $GUI_HIDE)
 
 ; Button Sync
@@ -440,11 +455,13 @@ $WindowMode = GUICtrlCreateCheckbox("Window Mode", 16, 121, 200, 20)
 GUICtrlSetTip(-1, "Zeigt das Game im Fenstermodus an")
 $FilePatching = GUICtrlCreateCheckbox("Ungepackte Dateien laden", 16, 144, 200, 20)
 GUICtrlSetTip(-1, "Erlaubt das Game ungepackte Files zu laden")
+GUICtrlSetState(-1, $GUI_DISABLE)
 $CheckSignatures = GUICtrlCreateCheckbox("Überprüfe Signaturen", 16, 167, 200, 20)
 GUICtrlSetTip(-1, "Überprüfe Signaturen von PBO Files")
 $EnableBattlEye = GUICtrlCreateCheckbox("Aktiviere BattlEye", 16, 190, 200, 20) ; Disabled da immer nötig
 GUICtrlSetTip(-1, "Unter Lostparadise.eu immer nötig")
 GUICtrlSetState(-1, $GUI_CHECKED)
+GUICtrlSetState(-1, $GUI_DISABLE)
 GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlSetBkColor(-1, $BKColor)
 GUICtrlSetColor(-1, $TextColor)
@@ -551,10 +568,10 @@ CheckArma3exe()
 GUISetState(@SW_SHOW)
 
 
-If Not StringInStr($ExecutablePath, "arma3battleye") Then
+If StringStripWS($ExecutablePath, 7) = "" Then
 	GUICtrlSetState($hTab2, $GUI_SHOW)
 	GUICtrlSetState($hTab1, $GUI_HIDE)
-	MsgBox(0,"Fehlende arma3battleye.exe", "Es ist keine arma3battleye.exe im Pfad hinterlegt" & @CRLF  & "Bitte diese auswählen")
+	MsgBox(0, "Fehlende arma3battleye.exe", "Es ist keine arma3battleye.exe im Pfad hinterlegt" & @CRLF & "Bitte diese auswählen")
 	GUICtrlSetBkColor($ExecutablePathSelect, 0xff1100)
 
 Else
@@ -587,6 +604,7 @@ While 1
 			_SyncButtonClick()
 		Case $LPLaunchButton
 			StartGame()
+			SaveSettings()
 
 		Case $LauncherTab
 			GUICtrlSetState($hTab1, $GUI_SHOW)
@@ -640,6 +658,7 @@ While 1
 		Case $NoLogs
 			_UpdateParameters()
 		Case $ExecutablePathSelect
+			GUICtrlSetBkColor($ExecutablePathSelect, $BKColor)
 			Local $sFile = FileOpenDialog("Wähle die arma3battleye.exe Datei", "C:\", "Executables (*.exe)", 1)
 			If @error Then
 				GUICtrlSetData($ExecutablePath, "Keine Datei ausgewählt")
@@ -698,16 +717,16 @@ Func _SyncButtonClick()
 
 	While 1
 
-		      Switch GUIGetMsg()
-		          Case $SyncButtonCancel
-		              GUICtrlSetState($SyncButton, $GUI_SHOW)
-		              GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
-		              GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
-					  GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
-		              $iExitStatus = 1
-		              $sExitMessage = "Sync was cancelled by user."
-		              ExitLoop
-		      EndSwitch
+		Switch GUIGetMsg()
+			Case $SyncButtonCancel
+				GUICtrlSetState($SyncButton, $GUI_SHOW)
+				GUICtrlSetState($SyncButtonCancel, $GUI_HIDE)
+				GUICtrlSetState($LPLaunchButton, $GUI_HIDE)
+				GUICtrlSetState($LPLaunchButtonDisabled, $GUI_SHOW)
+				$iExitStatus = 1
+				$sExitMessage = "Sync was cancelled by user."
+				ExitLoop
+		EndSwitch
 
 
 		Local $sLine = StdoutRead($iPID)
@@ -747,8 +766,8 @@ Func _SyncButtonClick()
 						$sOutput &= $sLine
 
 					Case StringInStr($sLine, "Download complete")
-						$sLine = StringReplace($sLine, "Download complete: ","Herunterladen: ")
-						$sLine = StringReplace($sLine, "Uncompressing file: ","Entpacke: ")
+						$sLine = StringReplace($sLine, "Download complete: ", "Herunterladen: ")
+						$sLine = StringReplace($sLine, "Uncompressing file: ", "Entpacke: ")
 						$sLine = StringReplace($sLine, "Downloading file", "Lade Datei")
 
 						$sOutput &= $sLine
@@ -779,7 +798,7 @@ Func _SyncButtonClick()
 	$FileOutput = FileOpen($FileOutputPath, 1)
 	    FileWrite($FileOutput, $Text)
 		FileWrite($FileOutput, @CRLF & @CRLF & @CRLF)
-    FileClose($FileOutput)
+	   FileClose($FileOutput)
 	#ce
 	$sOutput &= @CRLF & "Synchronization abgeschlossen" & @CRLF & "Viel Spaß"
 	GUICtrlSetData($Output, $sOutput)
@@ -892,7 +911,7 @@ Func _UpdateArma3SyncButtonClick()
 					$sOutput &= $sLine
 				EndIf
 				If StringInStr($sLine, "No new update available.") Then
-					$sLine = StringReplace($sLine, "No new update available.","Keine neue Version von ArmA3Sync gefunden")
+					$sLine = StringReplace($sLine, "No new update available.", "Keine neue Version von ArmA3Sync gefunden")
 					$sOutput &= $sLine
 				EndIf
 			EndIf
@@ -986,7 +1005,7 @@ EndFunc   ;==>_GUICtrlPic_Create
 
 Func StartGame()
 	$Armaparafile = @WorkingDir & "\LP-Data\ArmaPar.txt"
-	FileOpen($Armaparafile,BitOR($FO_OVERWRITE, $FO_CREATEPATH))
+	FileOpen($Armaparafile, BitOR($FO_OVERWRITE, $FO_CREATEPATH))
 	Local $mods = ""
 	If GUICtrlRead($ModPackOptional) = $GUI_CHECKED Then
 		$mods = IniRead($sTempIni, "Serverdata", "mod", $IniDefaultwert)
@@ -998,21 +1017,33 @@ Func StartGame()
 		EndIf
 	EndIf
 
-
-	$ArmaParamters = $sParameters & "-connect="&IniRead($sTempIni, "Serverdata", "connect", $IniDefaultwert) &@CRLF& "-port="&IniRead($sTempIni, "Serverdata", "port", $IniDefaultwert) &@CRLF& "-password="&IniRead($sTempIni, "Serverdata", "password", $IniDefaultwert)&@CRLF& "-mod="&$mods
-	FileWrite($Armaparafile,$ArmaParamters)
+	$ArmaParamters = $sParameters & "-connect=" & IniRead($sTempIni, "Serverdata", "connect", $IniDefaultwert) & @CRLF & "-port=" & IniRead($sTempIni, "Serverdata", "port", $IniDefaultwert) & @CRLF & "-password=" & IniRead($sTempIni, "Serverdata", "password", $IniDefaultwert) & @CRLF & "-mod=" & $mods
+	FileWrite($Armaparafile, $ArmaParamters)
 	FileClose($Armaparafile)
+	; Dateiinhalt lesen
+	Local $fileContent = FileRead($Armaparafile)
+
+	; Zeilenumbrüche durch Leerzeichen ersetzen
+	Local $singleLineContent = StringReplace($fileContent, @CRLF, " ")
+
+	; Optional: Ersetzen von nur LF (Line Feed), falls die Datei dieses Zeichen verwendet
+	$singleLineContent = StringReplace($singleLineContent, @LF, " ")
+
+	; Inhalt in die Ausgabedatei schreiben
+	;_FileWriteFromArray($outputFile, StringSplit($singleLineContent, " "), 1)
 
 
 
-	MsgBox (0,"StartGame","Start Game: " & GUICtrlRead($ExecutablePath))
-	;ShellExecute ($ExecutablePath,'"-par='&$Armaparafile&'"')
-EndFunc
+
+	;MsgBox(0, "StartGame", "Start Game: " & GUICtrlRead($ExecutablePath) & " " & $singleLineContent)
+	ShellExecute(GUICtrlRead($ExecutablePath), $singleLineContent)
+	FileDelete($Armaparafile)
+EndFunc   ;==>StartGame
 
 Func CheckArma3exe()
 	Local $DefaultArma3Path = "C:\Program Files (x86)\Steam\steamapps\common\Arma 3\arma3battleye.exe"
 	If FileExists($DefaultArma3Path) Then
-		GUICtrlSetData($ExecutablePathSelect,$DefaultArma3Path)
+		GUICtrlSetData($ExecutablePath, $DefaultArma3Path)
 	EndIf
 EndFunc   ;==>CheckArma3exe
 
