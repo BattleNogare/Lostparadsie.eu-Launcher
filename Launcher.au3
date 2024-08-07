@@ -280,13 +280,14 @@ Else
 
 		; Erstellen eines temporären Batch-Skripts zum Löschen der Datei
 		Global $batchFile = @WorkingDir & "\LP-Data\delete_and_update.bat"
+		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Erstelle bat")
 		FileWrite($batchFile, '@echo off' & @CRLF)
 		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
 		FileWrite($batchFile, 'del "' & $programName & '"' & @CRLF)
 		FileWrite($batchFile, 'rename "' & @WorkingDir & '\Launcherneu.exe" "' & @ScriptDir & '\' & @ScriptName & '"' & @CRLF)
 		FileWrite($batchFile, 'start "" "' & @ScriptDir & '\Launcher.exe" Update' & @CRLF)
 		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
-		FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
+		;FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
 
 		; Batch-Skript ausführen
 		Run($batchFile, "", @SW_HIDE)
