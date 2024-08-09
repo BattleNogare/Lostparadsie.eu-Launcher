@@ -285,12 +285,14 @@ Else
 		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
 		FileWrite($batchFile, 'del "' & $programName & '"' & @CRLF)
 		FileWrite($batchFile, 'rename "' & @WorkingDir & '\Launcherneu.exe" "' & @ScriptDir & '\' & @ScriptName & '"' & @CRLF)
+		FileWrite($batchFile, 'timeout /t 1 /nobreak' & @CRLF)
 		FileWrite($batchFile, 'start "" "' & @ScriptDir & '\Launcher.exe" Update' & @CRLF)
 		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
-		;FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
+		FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
 
 		; Batch-Skript ausführen
 		Run($batchFile, "", @SW_HIDE)
+
 		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Launcher Neustart")
 		Exit
 
@@ -298,6 +300,7 @@ Else
 		;MsgBox(0, "[Lostparadise.eu]", "Kein Update" & @CRLF & "Nun startet der Launcher")
 	EndIf
 EndIf
+
 
 
 DllCall("uxtheme.dll", "none", "SetThemeAppProperties", "int", 0)
