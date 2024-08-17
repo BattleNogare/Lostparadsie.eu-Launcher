@@ -276,7 +276,7 @@ Else
 		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Check1")
 
 		$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher.exe", $IniDefaultwert)
-		$Launcherpath = @WorkingDir & "Launcherneu.exe"
+		$Launcherpath = @WorkingDir & "\Launcherneu.exe"
 			Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
 			If @error = 0 And FileExists($Launcherpath) Then
 				FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe")
