@@ -273,8 +273,20 @@ Else
 
 	If $OnlineVersion <> $ClientVersion Then
 
-		Run('"' & $sDownloadExe & '" "Launcher.exe" "Launcher_dest" "' & $sTempIni & '"', @ScriptDir)
-		Sleep(100)
+		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Check1")
+
+		$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher.exe", $IniDefaultwert)
+		$Launcherpath = @WorkingDir & "Launcherneu.exe"
+			Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
+			If @error = 0 And FileExists($Launcherpath) Then
+				FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe")
+			Else
+				FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe fehlgeschlagen")
+			EndIf
+			InetClose($LaunchDownload)
+		Sleep(1000)
+
+		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Check2")
 
 		Local $programName = @ScriptFullPath
 
