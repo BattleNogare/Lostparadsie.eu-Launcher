@@ -277,33 +277,51 @@ Else
 
 		$LauncherURL = IniRead($sTempIni, "Downloads", "Launcher.exe", $IniDefaultwert)
 		$Launcherpath = @WorkingDir & "\Launcherneu.exe"
-			Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
-			If @error = 0 And FileExists($Launcherpath) Then
-				FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe")
-			Else
-				FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe fehlgeschlagen")
-			EndIf
-			InetClose($LaunchDownload)
+		Local $LaunchDownload = InetGet($LauncherURL, $Launcherpath, 1, $INET_DOWNLOADWAIT)
+		If @error = 0 And FileExists($Launcherpath) Then
+			FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe")
+		Else
+			FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Download Lauchnerneu.exe fehlgeschlagen")
+		EndIf
+		InetClose($LaunchDownload)
 		Sleep(1000)
 
 		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Check2")
 
 		Local $programName = @ScriptFullPath
 
-		; Erstellen eines temporären Batch-Skripts zum Löschen der Datei
-		Global $batchFile = @WorkingDir & "\LP-Data\delete_and_update.bat"
-		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Erstelle bat")
-		FileWrite($batchFile, '@echo off' & @CRLF)
-		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
-		FileWrite($batchFile, 'del "' & $programName & '"' & @CRLF)
-		FileWrite($batchFile, 'rename "' & @WorkingDir & '\Launcherneu.exe" "' & @ScriptDir & '\' & @ScriptName & '"' & @CRLF)
-		FileWrite($batchFile, 'timeout /t 1 /nobreak' & @CRLF)
-		FileWrite($batchFile, 'start "" "' & @ScriptDir & '\Launcher.exe" Update' & @CRLF)
-		FileWrite($batchFile, 'timeout /t 2 /nobreak' & @CRLF)
-		FileWrite($batchFile, '(goto) 2>nul & del "%~f0"' & @CRLF)
+		; Datei-Pfad für die Batch-Datei
+		Local $sBatchFile = @WorkingDir & "\LP-Data\update-launcher.bat"
 
-		; Batch-Skript ausführen
-		Run($batchFile, "", @SW_HIDE)
+		; Datei öffnen oder erstellen
+		Local $hFile = FileOpen($sBatchFile, 2)
+
+		; Zeilen zur Batch-Datei hinzufügen
+		FileWriteLine($hFile, "@echo off")
+		FileWriteLine($hFile, "timeout /t 2 /nobreak")
+		FileWriteLine($hFile, 'echo Versuche, Launcher.exe zu löschen...')
+		FileWriteLine($hFile, 'if exist "C:\Users\win10pc\Desktop\Lostparadise-Launcher\ArmA3Sync\Launcher.exe" (')
+		FileWriteLine($hFile, '    del "C:\Users\win10pc\Desktop\Lostparadise-Launcher\ArmA3Sync\Launcher.exe"')
+		FileWriteLine($hFile, '    echo Launcher.exe wurde gelöscht.')
+		FileWriteLine($hFile, ') else (')
+		FileWriteLine($hFile, '    echo Launcher.exe nicht gefunden, überspringe das Löschen.')
+		FileWriteLine($hFile, ')')
+		FileWriteLine($hFile, 'echo Wechsel in das Verzeichnis...')
+		FileWriteLine($hFile, 'cd /d "C:\Users\win10pc\Desktop\Lostparadise-Launcher\ArmA3Sync"')
+		FileWriteLine($hFile, 'echo Benenne Launcherneu.exe um...')
+		FileWriteLine($hFile, 'rename "Launcherneu.exe" "Launcher.exe"')
+		FileWriteLine($hFile, 'timeout /t 1 /nobreak')
+		FileWriteLine($hFile, 'echo Starte den Launcher mit Update...')
+		FileWriteLine($hFile, 'start "" "C:\Users\win10pc\Desktop\Lostparadise-Launcher\ArmA3Sync\Launcher.exe" Update')
+		FileWriteLine($hFile, 'timeout /t 2 /nobreak')
+		FileWriteLine($hFile, 'echo Vorgang abgeschlossen.')
+		FileWriteLine($hFile, 'pause')
+
+		; Datei schließen
+		FileClose($hFile)
+
+		; Optional: Batch-Datei direkt ausführen
+		Run('"' & $sBatchFile & '"', @SW_HIDE)
 
 		FileWrite($hLogFile, @CRLF & $sTimeStamp & " - " & "Neue Version gefunden - Launcher Neustart")
 		Exit
@@ -315,7 +333,7 @@ EndIf
 
 
 
-DllCall("uxtheme.dll", "none", "SetThemeAppProperties", "int", 0)
+;DllCall("uxtheme.dll", "none", "SetThemeAppProperties", "int", 0)
 
 $ParaIniFile = @WorkingDir & "\LP-Data\Launcherconfig.ini"
 Local $sParameters = ""
@@ -327,7 +345,7 @@ Local $TextColor = IniRead($sTempIni, "Launcher", "TextColor", $IniDefaultwert)
 Local $repositoryname = IniRead($sTempIni, "Repository", "repositoryname", $IniDefaultwert)
 
 ; GUI erstellen
-$Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_POPUP, $WS_EX_LAYERED)
+$Form1 = GUICreate("[Lostparadise.eu]", 800, 570, -1, -1, $WS_EX_LAYERED)
 ;GUIRegisterMsg($WM_LBUTTONDOWN, "WM_LBUTTONDOWN")
 GUICtrlSetDefColor($TextColor)
 GUICtrlSetDefBkColor($BKColor)
